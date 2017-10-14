@@ -1,0 +1,3 @@
+#! /bin/bash
+/bin/sed -i 's,^\([ ]*auto_unlock[ ]*=\).*,\1'1',g' /boot/parameters.txt
+sudo /var/www/localhost/htdocs/bin/EnableAutoUnlock

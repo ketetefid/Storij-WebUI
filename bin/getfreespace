@@ -1,0 +1,8 @@
+#! /bin/bash
+# This script returs the current free space + the size of SiaHost.
+# As the size of SiaHost directory increases, the user needs to be informed
+# of the total available disk space for Sia which implies that SiaHost itself
+# will be a part of the total avilable space.
+freespace_withM=`df -hBM ${1} | tail -1 | awk '{print $4}'` &> /dev/null
+hostpointspace_withM=$(du -shBM ${1} | awk '{print $1}')
+echo $((${freespace_withM%?}+${hostpointspace_withM%?}))

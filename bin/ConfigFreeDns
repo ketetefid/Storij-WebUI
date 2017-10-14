@@ -1,0 +1,15 @@
+#! /bin/bash
+#cp -a /etc/ddclient/ddclient.conf.base /etc/ddclient/ddclient.conf &&\
+echo "daemon=300
+syslog=yes
+mail=root
+mail-failure=root
+ssl=yes
+use=web
+server=freedns.afraid.org
+protocol=freedns" > /etc/ddclient/ddclient.conf &&\
+echo "login=$1" >>/etc/ddclient/ddclient.conf &&\
+echo "password=$2" >>/etc/ddclient/ddclient.conf &&\
+echo "$3" >>/etc/ddclient/ddclient.conf
+/etc/init.d/ddclient restart
+/sbin/rc-update add ddclient default

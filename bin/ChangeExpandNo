@@ -1,0 +1,2 @@
+#! /bin/bash
+/bin/sed -i 's,^\([ ]*expand[ ]*=\).*,\1'0',g' /boot/parameters.txt

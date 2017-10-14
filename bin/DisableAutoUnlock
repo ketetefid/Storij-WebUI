@@ -1,0 +1,2 @@
+#! /bin/bash
+/sbin/rc-update del WalletUnlocker default

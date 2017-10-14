@@ -1,0 +1,3 @@
+#! /bin/bash
+/etc/init.d/ddclient stop
+/sbin/rc-update del ddclient default

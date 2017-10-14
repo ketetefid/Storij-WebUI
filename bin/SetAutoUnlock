@@ -1,0 +1,6 @@
+#! /bin/bash
+unlocker=/usr/local/bin/unlocker
+cp ../bin/unlocker_base $unlocker
+echo "$1" >> $unlocker
+echo "ENDDOC" >> $unlocker
+chmod 750 $unlocker

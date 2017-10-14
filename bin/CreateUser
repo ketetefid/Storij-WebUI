@@ -1,0 +1,2 @@
+#! /bin/bash
+/usr/sbin/useradd -m -G users,wheel,audio -s /bin/bash ${1}

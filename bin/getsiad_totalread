@@ -1,0 +1,16 @@
+#! /bin/bash
+siapid=$(pgrep --exact siad)
+rw=$(cat "/proc/$siapid/io" | grep -w "read_bytes" |awk '{print $2}')
+# We print in GiB
+rwi=`echo $rw/1024/1024/1024 | bc -l`
+printf "%.2f GiB\n" $rwi
+
+# A script for checking that if it is less than 1024, let's write in MiB and if it is bigger, we will write in GiB.
+#if [[ $rwi -ge 1024 ]]
+#then
+#    printf "%.1f\n" "$(($rwi/1024))"
+#else
+#    printf "%.1f\n" "$(($rwi))"
+#fi
+
+
