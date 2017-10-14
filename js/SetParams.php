@@ -486,24 +486,22 @@ if ( isset($_SESSION['uname']) and isset($_SESSION['authenticator']) and
   }
   // Checking for announcing request
   if (isset($_POST['announcing'])) {
-    /*
-      $apihacurl = 'http://localhost:9980/host/announce';
-      $chha = curl_init();
-      curl_setopt($chha, CURLOPT_USERAGENT, "Sia-Agent");
-      curl_setopt($chha, CURLOPT_URL, $apihacurl);
-      curl_setopt($chha, CURLOPT_HEADER, false);
-      curl_setopt($chha, CURLOPT_RETURNTRANSFER, true);
-      curl_setopt($chha, CURLOPT_BINARYTRANSFER, true);
-      curl_setopt($chha, CURLOPT_CONNECTTIMEOUT, 5);
-      $netaddress=$_POST['hostaddress'];
-      $hconfigdata=[ 'netaddress' => $netaddress ];
-      curl_setopt($chha, CURLOPT_POSTFIELDS, $hconfigdata);
-      
-      $resha = curl_exec($chha);
-      $httpCodeha = curl_getinfo($chha, CURLINFO_HTTP_CODE);
-      curl_close($chha);
-      echo $httpCodeha;
-    */
+    $apihacurl = 'http://localhost:9980/host/announce';
+    $chha = curl_init();
+    curl_setopt($chha, CURLOPT_USERAGENT, "Sia-Agent");
+    curl_setopt($chha, CURLOPT_URL, $apihacurl);
+    curl_setopt($chha, CURLOPT_HEADER, false);
+    curl_setopt($chha, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($chha, CURLOPT_BINARYTRANSFER, true);
+    curl_setopt($chha, CURLOPT_CONNECTTIMEOUT, 5);
+    $netaddress=$_POST['hostaddress'];
+    $hconfigdata=[ 'netaddress' => $netaddress ];
+    curl_setopt($chha, CURLOPT_POSTFIELDS, $hconfigdata);
+    
+    $resha = curl_exec($chha);
+    $httpCodeha = curl_getinfo($chha, CURLINFO_HTTP_CODE);
+    curl_close($chha);
+    echo $httpCodeha;
   }
   // Checking for retiring request
   if (isset($_POST['retiring'])) {
