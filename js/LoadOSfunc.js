@@ -83,7 +83,7 @@ $(document).ready(function(){
 $(document).ready(function(){
     $("#siausrsubmit").click(function(e){
         var siausrval=$("#siausr").val();
-	if (!/^\d/.test(siausrval) && /^[a-zA-Z0-9]*$/.test(siausrval)) {
+	if (!/^\d/.test(siausrval) && /^[a-z0-9]*$/.test(siausrval)) {
             $.ajax({
 		url: "js/SetParams.php",
 		type: "POST",
