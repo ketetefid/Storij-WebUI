@@ -78,8 +78,8 @@
     	      // Reading from the crontab script output
     	      $response=file_get_contents ('/tmp/CommonAPI');
 	      $datac = json_decode($response);
-	      $currentheight=$datac->height;
-	      $pdone=number_format(($height/$currentheight)*100,4);
+	      @$currentheight=$datac->height;
+	      @$pdone=number_format(($height/$currentheight)*100,4);
 	      $bremaining=$currentheight-$height; ?>
 	    <span id="SyncStatus" style="color:red;font-weight:bold;">
 	      
