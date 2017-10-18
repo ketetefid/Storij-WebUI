@@ -45,8 +45,8 @@
 		    if ($FlistD["blockdevices"][$i]["children"][$j]["mountpoint"] != null) {
 		      $IsMounted[$i]=true;
 		    }
-		    // We exclude extended and swap partitions.
-		    if ($FlistD["blockdevices"][$i]["children"][$j]["parttype"] != "0xf" and $FlistD["blockdevices"][$i]["children"][$j]["fstype"]!="swap") {
+		    // We exclude extended and swap and vfat partitions.
+		    if ($FlistD["blockdevices"][$i]["children"][$j]["parttype"] != "0xf" and $FlistD["blockdevices"][$i]["children"][$j]["fstype"]!="swap" and $FlistD["blockdevices"][$i]["children"][$j]["fstype"]!="vfat") {
 		      $k++;
 		      
 		      //List of partitions for each drive in a nice tabular way. -->
