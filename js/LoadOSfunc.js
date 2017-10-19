@@ -217,8 +217,8 @@ $(document).ready(function(){
 	var pass=$("#AutoUnlockWalletPass").val();
 	// The user must supply the password.
 	if (pass.length==0) {
-	    alert ("Please enter the password.")
-	} else {
+	    alert ("Please enter the password.");
+	} else if (/^[a-zA-Z0-9*!@#$%]*$/.test(pass)) {
 	    // Set the password in /usr/local/bin/unlocker and enable auto-unlocking. Change the parameters.txt as well.
 	    $.ajax({
                 url : 'js/SetParams.php',
@@ -236,6 +236,8 @@ $(document).ready(function(){
 	    }).done(function(){
 		$("#AutoUnlockModal").hide();
 	    });
+	} else {
+	    alert ("Please enter a proper password. Only letters, numbers and these characters are allowed: *!@#$%");
 	}
     });
 });
@@ -342,7 +344,7 @@ $(document).ready(function () {
 	    pass=$("#FreeDNSPass").val(),
 	    domain=$("#FreeDNSdomain").val();
 	// We check if the user has input all the necessary data.
-	if (login && pass && domain) {
+	if (login && pass && domain && /^[a-zA-Z0-9.]*$/.test(login) && /^[a-zA-Z0-9.*!@#$%]*$/.test(pass) && /^[a-zA-Z0-9.]*$/.test(domain) ) {
 	    $.ajax ({
 		url : "js/SetParams.php",
 		type : "POST",
@@ -357,7 +359,7 @@ $(document).ready(function () {
 		},2000);
 	    });
 	} else {
-	    alert("Please fill the form completely.");
+	    alert("Please fill the form completely with proper values.");
 	}
     });
 });
