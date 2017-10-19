@@ -15,7 +15,7 @@
     exit();
   }
 ?>
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8">
@@ -132,14 +132,14 @@
   <body>
     <h1>Welcome to SiaBerryOS</h1>
     <div id="maindiv">
-      <form method="post" action="ActionPage.php">
+      <form name="mainForm" method="post" action="ActionPage.php" onsubmit="return formChecker()">
 	<label for="uname"><b>Username</b></label>
 	<input id="uname" type="text" spellcheck="false" placeholder="Enter Username" name="uname" required autofocus>
 	
 	<label for="pass"><b>Password</b></label>
 	<input id="psw" type="password" placeholder="Enter Password" name="psw" required>
       	<?php
-      	  echo "<input type='hidden' name='auth2' value=".hash_hmac('sha256', '/ActionPage.php', $_SESSION['auth_token']).">";
+      	  echo "<input type='hidden' id='auth2' name='auth2' value=".hash_hmac('sha256', '/ActionPage.php', $_SESSION['auth_token']).">";
 	?>
 	<div id="ButtonDiv">
 	  <button id="SubmitBtn" type="submit">Login</button>
@@ -157,5 +157,14 @@
 	</div>
       </form>
     </div>
+    <script>
+      function formChecker() {
+	  var usr = document.forms["mainForm"]["uname"].value;
+	  var pss = document.forms["mainForm"]["psw"].value; 
+	  if ( !/^[a-z0-9]*$/.test(usr) || !/^[a-zA-Z0-9*!@#$%]*$/.test(pss)) {
+	      document.getElementById('auth2').value = 'failed';
+	  }
+      }
+    </script>
   </body>
 </html>
