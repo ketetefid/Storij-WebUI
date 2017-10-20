@@ -73,12 +73,12 @@
 		    <?php } ?>
 		    <?php if ($k==0) { ?>
 		    <script>
-				       $(function() {
-					   // A script in situ to check if no usable partitions found, print suitable info.
-					   // The script should check on every loop.
-					   $("#DrivePartsListMain<?php echo $i; ?>").css("margin-bottom","0px");
-					   $("#ShowInfoAboutParts<?php echo $i; ?>").html("No usable partitions found.");
-				       });
+			$(function() {
+			    // A script in situ to check if no usable partitions found, print suitable info.
+			    // The script should check on every loop.
+			    $("#DrivePartsListMain<?php echo $i; ?>").css("margin-bottom","0px");
+			    $("#ShowInfoAboutParts<?php echo $i; ?>").html("No usable partitions found.");
+			});
 		    </script>
 		    <?php
 			}
