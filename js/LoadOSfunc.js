@@ -218,7 +218,7 @@ $(document).ready(function(){
 	// The user must supply the password.
 	if (pass.length==0) {
 	    alert ("Please enter the password.");
-	} else if (/^[a-zA-Z0-9*!@#$%]*$/.test(pass)) {
+	} else if (/^[a-zA-Z0-9*!@#%+-]*$/.test(pass)) {
 	    // Set the password in /usr/local/bin/unlocker and enable auto-unlocking. Change the parameters.txt as well.
 	    $.ajax({
                 url : 'js/SetParams.php',
@@ -237,7 +237,7 @@ $(document).ready(function(){
 		$("#AutoUnlockModal").hide();
 	    });
 	} else {
-	    alert ("Please enter a proper password. Only letters, numbers and these characters are allowed: *!@#$%");
+	    alert ("Please enter a proper password. Only letters, numbers and these characters are allowed: +-*%!@#");
 	}
     });
 });
