@@ -110,6 +110,8 @@ if ( isset($_SESSION['uname']) and isset($_SESSION['authenticator']) and
     $domain=$_POST['FreeDnsDomain'];
     exec ("sudo ../bin/ConfigFreeDns $login $pass $domain &>/dev/null");
     exec("../bin/SetParams 'ext_ip_type' 'dynamic'");
+    exec("../bin/SetParams 'freedns_domain' '$domain'");
+    exec("../bin/SetParams 'freedns_login' '$login'");
   }
   // Checking for a change to static external IP
   if (isset ($_POST['ChangeDnsStatic'])) {
