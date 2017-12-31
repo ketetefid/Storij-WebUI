@@ -89,7 +89,7 @@
     <!-- To make the CommonAPI results ready at load in case crontab is too slow for you. -->
     <?php
       if (!file_exists('/tmp/CommonAPI')) {
-	exec("/usr/bin/wget -O /tmp/CommonAPI https://explore.sia.tech/explorer");
+	exec("/usr/bin/wget -O /tmp/CommonAPI https://siastats.info/dbs/auxblock.json");
       }
     ?>
     <script> 
