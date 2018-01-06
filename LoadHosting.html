@@ -134,7 +134,7 @@
 		    // To get it rouned to a lower 100 MiB, we multiply by 10, floor then divide by 10.
 		    // Finally we divide by 1024 to show it in GiB.
 		    // We trim it as PHP will throw notice at us.
-		    $AvailableSpace=number_format(floor(trim(shell_exec("bin/getfreespace $host"))*10/1024)/10,1);
+		    $AvailableSpace=number_format(floor(trim(shell_exec("bin/getfreespace $host"))*10/1024)/10,1,'.','');
 		    echo '<div class="StorageShower" style="vertical-align:middle;display:block;margin:30px 10px;"><div style="display:flex;"><input type="text" spellcheck="false" class="HostPoint" value="'.$host.'" readonly></div><div style="text-align:center;diaplay:inline"><input type="range" min=0 step=0.1 max='.$AvailableSpace.' value='.$AvailableSpace.' class="StorageSlider" id="hstorage'.$nh.'" style="margin-left:5px;float:left;width:70%;"><span style="margin:0px 20px;" class="StorageSliderVal">'.$AvailableSpace.' GiB'.'</span></div></div>';
 		    $nh++;
 		  }
