@@ -112,8 +112,9 @@ $(document).ready(function(){
     });
     
     $("#initTheWallet").click(function(){
-	if ($.trim($("#walletPass").val())=="") {
-	    alert("Please set a proper password for your wallet.");
+	var passInit=$("#walletPass").val();
+	if ($.trim(passInit)=="" || !(/^[a-zA-Z0-9*!@#%+-]*$/.test(passInit))) {
+	    alert("Please set a proper password for your wallet. Only letters, numbers and these characters are allowed: +-*%!@#");
 	    // The user clicked on initialize button. This is by a new seed. We will append a text area containing the new seed.
 	} else if (byNewSeed) {
 	    var newSeed="";
