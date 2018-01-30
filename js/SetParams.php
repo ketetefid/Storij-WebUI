@@ -457,7 +457,7 @@ if ( isset($_SESSION['uname']) and isset($_SESSION['authenticator']) and
   if (isset($_POST['SetSettings'])) {
     // hconfigdata will already have the array to be sent to the API call.
     $hconfigdata=json_decode($_POST['hconfig_json'],true);
-    // Change SC values to hastings for 3 needed parameters
+    // Change the values to proper values for feeding into the API
     if (isset($hconfigdata['collateralbudget'])) {
       $collateralbudget=strval(bcmul(strval($hconfigdata['collateralbudget']),'1000000000000000000000000'));
       $hconfigdata['collateralbudget']=$collateralbudget;
@@ -470,6 +470,39 @@ if ( isset($_SESSION['uname']) and isset($_SESSION['authenticator']) and
       $mincontprice=strval(bcmul(strval($hconfigdata['mincontractprice']),'1000000000000000000000000'));
       $hconfigdata['mincontractprice']=$mincontprice;
     }
+    if (isset($hconfigdata['maxdownloadbatchsize'])) {
+      $maxdlbsize=strval(bcmul(strval($hconfigdata['maxdownloadbatchsize']),'1048576'));
+      $hconfigdata['maxdownloadbatchsize']=$maxdlbsize;
+    }
+    if (isset($hconfigdata['maxrevisebatchsize'])) {
+      $maxrevbsize=strval(bcmul(strval($hconfigdata['maxrevisebatchsize']),'1048576'));
+      $hconfigdata['maxrevisebatchsize']=$maxrevbsize;
+    }
+    if (isset($hconfigdata['maxduration'])) {
+      $maxdur=strval(bcmul(strval($hconfigdata['maxduration']),'144'));
+      $hconfigdata['maxduration']=$maxdur;
+    }
+    if (isset($hconfigdata['windowsize'])) {
+      $winsize=strval(bcmul(strval($hconfigdata['windowsize']),'144'));
+      $hconfigdata['windowsize']=$winsize;
+    }
+    if (isset($hconfigdata['collateral'])) {
+      $collat=strval(bcmul(strval($hconfigdata['collateral']),'231481481.481'));
+      $hconfigdata['collateral']=floor($collat);
+    }
+    if (isset($hconfigdata['minstorageprice'])) {
+      $minstprice=strval(bcmul(strval($hconfigdata['minstorageprice']),'231481481.481'));
+      $hconfigdata['minstorageprice']=floor($minstprice);
+    }
+    if (isset($hconfigdata['mindownloadbandwidthprice'])) {
+      $mindlprice=strval(bcmul(strval($hconfigdata['mindownloadbandwidthprice']),'1000000000000'));
+      $hconfigdata['mindownloadbandwidthprice']=$mindlprice;
+    }
+    if (isset($hconfigdata['minuploadbandwidthprice'])) {
+      $minupprice=strval(bcmul(strval($hconfigdata['minuploadbandwidthprice']),'1000000000000'));
+      $hconfigdata['minuploadbandwidthprice']=$minupprice;
+    }
+
     
     $apiwacurl = 'http://localhost:9980/host';
     $chwa = curl_init();

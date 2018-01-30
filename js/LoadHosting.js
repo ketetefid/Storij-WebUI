@@ -98,22 +98,22 @@ $(document).ready(function () {
 
     // For converting blocks to day in hosting configuration.
     $("#HCMaxDuration").keyup(function(){
-	var blocks=$(this).val();
-	if (blocks=="") {
-	    $("#HCMaxDuration2day").html("180");
+	var days=$(this).val();
+	if (days=="") {
+	    $("#HCMaxDuration2block").html("25920");
 	} else {
-	    var days=Math.floor(blocks*10/60/24);
-	    $("#HCMaxDuration2day").html(days);
+	    var blocks=Math.floor(days*6*24);
+	    $("#HCMaxDuration2block").html(blocks);
 	}
     });
 
     $("#HCWindowSize").keyup(function(){
-	var blocks=$(this).val();
-	if (blocks=="") {
-	    $("#HCWindowSize2day").html("1");
+	var days=$(this).val();
+	if (days=="") {
+	    $("#HCWindowSize2block").html("144");
 	} else {
-	    var days=Math.floor(blocks*10/60/24);
-	    $("#HCWindowSize2day").html(days);
+	    var blocks=Math.floor(days*6*24);
+	    $("#HCWindowSize2block").html(blocks);
 	}
     });
 });

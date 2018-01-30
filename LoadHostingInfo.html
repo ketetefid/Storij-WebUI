@@ -205,7 +205,7 @@
 	    Collateral
 	  </td>
 	  <td>
-	    <?php echo $collateral; ?> <span style="margin-left:10px">H/Byte/Block</span>
+	    <?php echo round($collateral*4.32e-9,2); ?> <span style="margin-left:10px">SC/TB/Month</span>
 	  </td>
 	</tr>
 	<tr>
@@ -229,7 +229,7 @@
 	    Download Price
 	  </td>
 	  <td>
-	    <?php echo $dlprice; ?> <span style="margin-left:10px">H/Byte</span>
+	    <?php echo round($dlprice/1000000000000,2); ?> <span style="margin-left:10px">SC/TB</span>
 	  </td>
 	</tr>
 	<tr>
@@ -237,7 +237,7 @@
 	    Upload Price
 	  </td>
 	  <td>
-	    <?php echo $upprice; ?> <span style="margin-left:10px">H/Byte</span>
+	    <?php echo round($upprice/1000000000000,2); ?> <span style="margin-left:10px">SC/TB</span>
 	  </td>
 	</tr>
 	<tr>
@@ -245,7 +245,7 @@
 	    Storage Price
 	  </td>
 	  <td>
-	    <?php echo $storageprice; ?> <span style="margin-left:10px">H/Byte/Block</span>
+	    <?php echo round($storageprice*4.32e-9,2); ?> <span style="margin-left:10px">SC/TB/Month</span>
 	  </td>
 	</tr>
 	<tr>
