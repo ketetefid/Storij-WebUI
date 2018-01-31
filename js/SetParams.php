@@ -520,7 +520,11 @@ if ( isset($_SESSION['uname']) and isset($_SESSION['authenticator']) and
     echo $httpCodewa;
   }
   // Checking for announcing request
+  // We would need to make two calls: the first to /host/announce
+  // and the second to /host to say that we would accept contracts.
+  // One call alone at /host/announce will not make the host accept contracts automatically.
   if (isset($_POST['announcing'])) {
+    // The announcing part
     $apihacurl = 'http://localhost:9980/host/announce';
     $chha = curl_init();
     curl_setopt($chha, CURLOPT_USERAGENT, "Sia-Agent");
@@ -537,6 +541,23 @@ if ( isset($_SESSION['uname']) and isset($_SESSION['authenticator']) and
     $httpCodeha = curl_getinfo($chha, CURLINFO_HTTP_CODE);
     curl_close($chha);
     echo $httpCodeha;
+
+    // The accepting-contracts part
+    $apiwacurl = 'http://localhost:9980/host';
+    $chwa = curl_init();
+    curl_setopt($chwa, CURLOPT_USERAGENT, "Sia-Agent");
+    curl_setopt($chwa, CURLOPT_URL, $apiwacurl);
+    curl_setopt($chwa, CURLOPT_HEADER, false);
+    curl_setopt($chwa, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($chwa, CURLOPT_BINARYTRANSFER, true);
+    curl_setopt($chwa, CURLOPT_CONNECTTIMEOUT, 5);
+    $hconfigdata=[ 'acceptingcontracts' => 'true' ];
+    curl_setopt($chwa, CURLOPT_POSTFIELDS, $hconfigdata);
+    
+    $reswa = curl_exec($chwa);
+    $httpCodewa = curl_getinfo($chwa, CURLINFO_HTTP_CODE);
+    curl_close($chwa);
+    echo $httpCodewa;
   }
   // Checking for retiring request
   if (isset($_POST['retiring'])) {
@@ -548,7 +569,7 @@ if ( isset($_SESSION['uname']) and isset($_SESSION['authenticator']) and
     curl_setopt($chwa, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($chwa, CURLOPT_BINARYTRANSFER, true);
     curl_setopt($chwa, CURLOPT_CONNECTTIMEOUT, 5);
-    $hconfigdata=[ 'acceptingcontracts' => false ];
+    $hconfigdata=[ 'acceptingcontracts' => 'false' ];
     curl_setopt($chwa, CURLOPT_POSTFIELDS, $hconfigdata);
     
     $reswa = curl_exec($chwa);
