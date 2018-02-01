@@ -5,7 +5,7 @@ source /boot/parameters.txt
 
 function format_and_add {
     # Create the partition.
-    if ! /usr/sbin/parted -s /dev/$1 -- mklabel msdos mkpart primary ext4 1MiB -1 &>/dev/null; then
+    if ! /usr/sbin/parted -s /dev/$1 -- mklabel gpt mkpart primary ext4 1MiB -1 &>/dev/null; then
 	echo "Failed to create a partition"
 	return 1
     fi
