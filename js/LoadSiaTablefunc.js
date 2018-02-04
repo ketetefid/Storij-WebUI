@@ -167,7 +167,7 @@ $(document).ready(function(){
 	    headers : { 'auther': $('meta[name="auther"]').attr('content') }
 	});
 	//$('#SiaTable').load('WaitForSiad.html');
-	$('#SiaTable').html('<table id="wait4sia" class="t1"><tr><td><div class="HostConfigItems" style="justify-content:center">Please wait until Sia dameon have started...<i class="fa fa-cog fa-spin fa-2x fa-fw"></i></div></td></tr></table>').show();
+	$('#SiaTable').html('<table id="wait4sia" class="t1"><tr><td><div class="HostConfigItems" style="justify-content:center">Please wait until Sia daemon have started...<i class="fa fa-cog fa-spin fa-2x fa-fw"></i></div></td></tr></table>').show();
 	// Make the WaitForSiad stay on page for 10 seconds and then reload the whole page.
 	setTimeout(function(){
 	    siadinfo.resolve(true);
