@@ -161,7 +161,7 @@
       function formChecker() {
 	  var usr = document.forms["mainForm"]["uname"].value;
 	  var pss = document.forms["mainForm"]["psw"].value; 
-	  if ( !/^[a-z0-9]*$/.test(usr) || !/^[a-zA-Z0-9*!@#$%]*$/.test(pss)) {
+	  if ( !/^[a-z0-9]*$/.test(usr) || !/^[a-zA-Z0-9*!@#^_]*$/.test(pss)) {
 	      document.getElementById('auth2').value = 'failed';
 	  }
       }
