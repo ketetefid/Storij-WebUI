@@ -65,7 +65,7 @@ $(document).ready(function(){
 $(document).ready(function(){
     $("#siadirsubmit").click(function(e){
 	var siadirval=$("#siadir").val();
-	if (/^[a-zA-Z\/]*$/.test(siadirval) && /^\//.test(siadirval)) {
+	if (/^[a-zA-Z0-9\-_/]*$/.test(siadirval) && /^\//.test(siadirval)) {
 	    $.ajax({
 		url: "js/SetParams.php",
 		type: "POST",
