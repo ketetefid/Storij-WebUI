@@ -1,8 +1,8 @@
 <?php
 session_start();
 if (isset($_POST['uname']) and isset($_POST['psw'])) {
-  $user=$_POST['uname'];
-  $pass=$_POST['psw'];
+  $user=escapeshellarg($_POST['uname']);
+  $pass=escapeshellarg($_POST['psw']);
   if (preg_match('/^[a-z0-9]*$/',$user) && preg_match('/^[a-zA-Z0-9*!@#^_]*$/',$pass)) {
     // Check if the post request comes from the login page
     if (isset($_POST['auth2']) and hash_equals($_POST['auth2'],hash_hmac('sha256', '/ActionPage.php', $_SESSION['auth_token']))) {
