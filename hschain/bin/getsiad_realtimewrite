@@ -1,0 +1,6 @@
+#! /bin/bash
+siapid=$(pgrep --exact hsd)
+# We need to let iotop iterate for at least two times as the first one does not have any outputs.
+# We gather the data for read from $4 and $5 and for write from $10 and $11.
+rwnow=$(iotop --iter=2 -b -p $siapid -a -q |grep "Actual DISK" | awk '{print $10" " $11}' |tail -1)
+echo $rwnow

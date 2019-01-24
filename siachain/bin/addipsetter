@@ -1,0 +1,5 @@
+#! /bin/bash
+rc-update add ipsetter default
+# We delete apache2 and fail2ban from the next boot to accelerate the process of getting the new IP
+rc-update del apache2 default
+rc-update del fail2ban default

@@ -1,0 +1,115 @@
+<?php
+  require('php/CheckSession.php');
+  if ($scheck) {
+?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/style.css">
+    <?php include 'php/CWApiCalls.php' ?>
+    <script src="js/jquery.min.js">
+    </script>
+    <script src="js/LoadSiaWalletfunc.js">
+    </script>
+  </head>
+  <body>
+    <fieldset>
+      <legend>Send & Receive Coins
+      </legend>
+      <h4 align="center">
+        <img src="img/SendSC.png" alt="Send Siacoins">
+      </h4>      
+      <table class="twallet">
+	<tr>
+	  <td>
+	    <div class="SendReceiveTags">Send to this address:
+	    </div>
+	    
+            <input type="text" spellcheck="false" id="receiveraddress" name="sendSC" value="" class="InputSC" style="text-align:center;" title="Put the receiver's address here.">
+	    <div class="SendReceiveTags">This amount:
+	    </div>
+	    <div style="text-align: center; vertical-align:middle;">
+	      
+	      <input type="text" spellcheck="false" class="SCvalue2" style="text-align:center;" name="amountSC" value="" id="amountSC" title="Enter the amount of SpaceCash you want to send. It is going to be in XSC.">
+	      <label id="amountSCLabel" for="amountSC" style="width:30px;">XSC
+	      </label>
+	      
+	    </div>
+	    <input type="button" value="Send!" class="SendReceiveSCButton" id="sendSCsubmit">
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    <div id="SendSCmessage" class="InfoMessage3">
+	    </div>
+	  </td>
+	</tr>
+      </table>
+      <hr class="line">
+      <h4 align="center">
+	<img src="img/ReceiveSC.png" alt="Receive Siacoins">
+      </h4>
+      <table class="twallet">
+	<tr>
+	  <td>
+	    <div class="SendReceiveTags">For receiving, you may reuse an already created address:
+            </div>
+	    <select name="AddressList" id="AddressList" class="DropDown">
+	      <option selected="selected" style="vertical-align: center;">Choose one
+	      </option>
+	      <?php
+    		foreach ($addresses as $key => $value) { ?>
+	      <option value="<?php echo $value; ?>">
+		<?php
+		  $ikey=$key+1;
+		  echo "Address no. ".$ikey;
+		?>
+	      </option>
+	      <?php
+    		} ?>
+	    </select>
+	    <input type="text" spellcheck="false" class="InputSC" name="scAddress" id="scAdress" title="This is your XSC address. You can give it to the others so that they will send you coins.">
+	    <div id="AddrMessage" class="InfoMessage">
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    <div class="SendReceiveTags">Or you can generate a new one:
+	    </div>
+	    <!-- Making input readonly will cause the mobile view not to be selectable -->
+	    <input type="text" spellcheck="false" class="InputSC" name="NewSCAddr" id="NewSCAddr" title="This is you new XSC address.">
+	    <input type="button" class="SendReceiveSCButton" value="Generate!" id="SCGenButton">
+	    <div id="AddrMessage2" class="InfoMessage">
+	    </div>
+	  </td>
+	</tr>
+      </table>
+    </fieldset>
+    <!-- ===================== -->
+    <!-- The Modal for Sending -->
+    <div id="SendSCModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content" style="width:75%;">
+	<div class="modal-header">
+	  <b>Confirm Your Transaction
+	  </b>
+	  <span class="closemodal" id="closeSendSC">&#10799;
+	  </span>
+	</div>
+	<div class="modal-body" id="SendSCInfo" style="margin:10px;padding:10px;">
+	</div>
+	<div class="modal-footer" id="SendSCFooter">
+	  <input type="button" value="Cancel" id="CancelsendSCsubmit" class="OkCancelButton" >
+	  <input type="button" value="Confirm" id="OKsendSCsubmit" class="OkCancelButton" >
+	</div>
+      </div>
+    </div>
+  </body>
+</html>
+<?php
+	} else {
+    exit();
+  }
+?>

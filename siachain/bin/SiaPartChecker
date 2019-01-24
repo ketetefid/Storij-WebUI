@@ -1,0 +1,5 @@
+#! /bin/bash
+findpart() {
+[ -e "$1" ] && df -P "$1"  | awk '/^\/dev/ {print $1}' || echo "$1 not found"
+}
+findpart $1

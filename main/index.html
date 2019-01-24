@@ -1,0 +1,106 @@
+<?php
+  require_once 'php/GoogleAuthenticator.php';
+  $tfsecret=trim(file_get_contents('/etc/SiaBerry/2fa-secret'));
+  if ($tfsecret == '') {
+      $tfauth = new PHPGangsta_GoogleAuthenticator();
+      $secret = $tfauth->createSecret();
+      $website = 'http://siaberry.com';
+      $title= 'SiaBerryOS';
+      $qrCodeUrl = $tfauth->getQRCodeGoogleUrl($title, $secret,$website);
+?>
+<!DOCTYPE html>
+<html class="html2">
+  <head>
+    <meta charset="UTF-8">
+    <title>SiaBerry OS, Hosting and Renting Platform
+    </title>
+    <link rel="stylesheet" href="css/login.css">
+  </head>
+  <body>
+    <h1>Welcome to SiaBerryOS</h1>
+    <div id="maindiv">
+      <form name="mainForm" method="post" action="ActionPage.php">
+	<p class="p2"> Save your 2FA secret in a safe place:</p>
+	<p class="p2"><?php echo $secret  ?></p>
+	<img src=<?php echo $qrCodeUrl;?> >
+      	<?php
+          echo "<input type='hidden' id='twoFAsec' name='twoFAsec' value=".$secret.">";
+        ?>
+	<div id="ButtonDiv">
+	  <button id="SubmitBtn" type="submit">Enable 2FA</button>
+	</div>
+      </form>
+    </div>
+  </body>
+</html>
+
+<?php      
+  } else {
+      session_start();
+      if (!isset($_SESSION['auth_token'])) {
+          $_SESSION['auth_token'] = bin2hex(random_bytes(28));
+          session_write_close();
+      }
+      $hashval=trim(file_get_contents('/etc/SiaBerry/hashval'));
+      // Make the session valid for 20 minutes.
+      if ( isset($_SESSION['uname']) and isset($_SESSION['authenticator']) and
+           isset($_SESSION['timeout']) and time() - $_SESSION['timeout'] < 1200 and
+           hash_equals($_SESSION['authenticator'],$hashval) ) {
+          // This will reset the counter to the current visit. But we want to logout after 20 minutes anyway.
+          //$_SESSION['timeout']=time();
+          header('Location: home.html');
+          exit();
+      }
+?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>SiaBerry OS, Hosting and Renting Platform
+    </title>
+    <link rel="stylesheet" href="css/login.css">
+  </head>
+  <body>
+    <h1>Welcome to SiaBerryOS</h1>
+    <div id="maindiv">
+      <form name="mainForm" method="post" action="ActionPage.php" onsubmit="return formChecker()">
+	<label for="uname"><b>Username</b></label>
+	<input id="uname" type="text" spellcheck="false" placeholder="Enter Username" name="uname" required autofocus>
+	
+	<label for="pass"><b>2FA Pass</b></label>
+	<input id="psw" type="password" placeholder="Enter Password" name="psw" required>
+      	<?php
+          echo "<input type='hidden' id='auth2' name='auth2' value=".hash_hmac('sha256', '/ActionPage.php', $_SESSION['auth_token']).">";
+        ?>
+	<div id="ButtonDiv">
+	  <button id="SubmitBtn" type="submit">Login</button>
+	  <?php
+            if (!empty($_GET['status'])) {
+                if ($_GET['status']=='loggedout') {
+                    echo '<p>You have successfully logged out.</p>';
+                } elseif ($_GET['status']=='invalid') {
+                    echo '<p style="color:red">Invalid username or password.</p>';
+                } elseif ($_GET['status']=='expired') {
+                    echo '<p>Your session has expired.</p>';
+                } elseif ($_GET['status']=='2FA_EN') {
+                    echo '<p>2FA has been enabled. Ready to login.</p>';
+                }
+            }
+      ?>
+      </div>
+      </form>
+    </div>
+    <script>
+	  function formChecker() {
+	      var usr = document.forms["mainForm"]["uname"].value;
+	      var pss = document.forms["mainForm"]["psw"].value; 
+	      if ( !/^[a-z0-9]*$/.test(usr) || !/^[0-9]*$/.test(pss)) {
+		  document.getElementById('auth2').value = 'failed';
+	      }
+	  }
+    </script>
+  </body>
+</html>
+<?php
+      }
+?>

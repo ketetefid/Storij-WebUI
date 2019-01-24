@@ -1,0 +1,3 @@
+#! /bin/bash
+/bin/sed -i 's,^\([ ]*sc_auto_unlock[ ]*=\).*,\1'0',g' /boot/SiaBerry/parameters.txt
+sudo /var/www/localhost/htdocs/siachain/bin/DisableAutoUnlock

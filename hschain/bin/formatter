@@ -1,0 +1,103 @@
+#! /bin/bash
+
+# Get $SIAUSR and $disklayout ready.
+source /boot/SiaBerry/parameters.txt
+
+function partitioner {
+    disk="$1"
+    dname=$(lsblk -nd -o model $disk | tr -d '[:space:]')
+    if [ $disklayout == "gpt" ]; then
+	# if gpt is requested we will simply make one big partition
+
+	parted -s "${disk}" -- mklabel $disklayout mkpart primary ext4 2048s 100% || return 1
+        sync
+        mkfs.ext4 -F "${disk}"1 -L ${dname}_p1 &>/dev/null || return 1
+        sync
+    else
+	# msdos was requested and according to the conditions a specific number of partitions will be created.
+	# preferred size of each partition in GiB (must be <=2048)
+	psize=2048
+	totalsize=$(fdisk -l | grep "Disk ${disk}" | awk {'print $5'})
+
+	np=$(($totalsize/1024/1024/1024/$psize+1))
+
+
+	parted -s ${disk} -- mklabel msdos || return 1
+	sleep 2
+	if (( $np < 5 )); then
+
+	    for i in $(seq 1 $(($np-1))); do
+
+		parted -s ${disk} -- mkpart primary ext4 $((1+($i-1)*psize*1024))MiB $((${psize}*1024*$i))MiB || return 1
+		sleep 2
+
+		mkfs.ext4 -F ${disk}$i -L ${dname}_p$i &>/dev/null || return 1
+		sync
+	    done
+
+	    parted -s ${disk} -- mkpart primary ext4 $(($psize*($np-1)*1024+1))MiB -1 || return 1
+
+	    mkfs.ext4 -F ${disk}$np -L ${dname}_p$np &>/dev/null || return 1
+	    sync
+	else
+
+	    for i in $(seq 1 3); do
+
+		parted -s ${disk} -- mkpart primary ext4 $((1+($i-1)*psize*1024))MiB $((${psize}*1024*$i))MiB || return 1
+		sleep 2
+
+		mkfs.ext4 -F ${disk}$i -L ${dname}_p$i &>/dev/null || return 1
+	    done
+	    parted -s ${disk} -- mkpart extended $(($psize*$i*1024))MiB -1 || return 1
+	    sleep 2
+	    for i in $(seq 4 $(($np-1))); do
+
+		parted -s ${disk} -- mkpart logical ext4 $((1+($i-1)*psize*1024))MiB $((${psize}*1024*$i))MiB || return 1
+		sleep 2
+
+		mkfs.ext4 -F ${disk}$((i+1)) -L ${dname}_p$i &>/dev/null || return 1
+	    done
+
+	    parted -s ${disk} -- mkpart logical ext4 $(($psize*($np-1)*1024+1))MiB -1 || return 1
+
+	    mkfs.ext4 -F ${disk}$((np+1)) -L ${dname}_p$np &>/dev/null || return 1
+	fi
+	sync
+    fi
+}
+
+
+function format_and_add {
+
+    partitioner "/dev/$1"
+    if [ $? -ne 0 ]; then
+	echo "Failed to partition the hostpoint."
+	return 1
+    fi
+
+    partname="${1}1"
+
+    # Get the UUID
+    diskid=`lsblk -n -o UUID /dev/$partname`
+
+    # Check if ${mpoint} exists. If not, create it inside /media.
+    mpoint=/media/${diskid}
+    if [ ! -d "${mpoint}" ]; then
+	mkdir -p "${mpoint}"
+    fi 
+
+    # Have a directory ready for Sia hosting.
+    hostpoint=${mpoint}/HyperHost
+    
+    # Add the entry to fstab and mount it.
+    echo "UUID=${diskid}    ${mpoint}   ext4    defaults,noatime  0  1" >>/etc/fstab &&\
+	mount ${mpoint} &&\
+	if [ ! -d "${hostpoint}" ]; then
+	    mkdir "${hostpoint}"
+	fi &&\
+	    chown ${SIAUSR}:${SIAUSR} -R ${hostpoint}
+}
+
+format_and_add $1
+echo $hostpoint
+exit $?

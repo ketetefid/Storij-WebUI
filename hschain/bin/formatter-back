@@ -1,0 +1,45 @@
+#! /bin/bash
+
+# Get $SIAUSR ready.
+source /boot/SiaBerry/parameters.txt
+
+function format_and_add {
+    # Create the partition.
+    if ! /usr/sbin/parted -s /dev/$1 -- mklabel gpt mkpart primary ext4 1MiB -1 &>/dev/null; then
+	echo "Failed to create a partition"
+	return 1
+    fi
+
+    # Make the partname: sda -> sda1
+    partname="${1}1"
+
+    # Format the new partition as ext4
+    if ! /sbin/mkfs.ext4 /dev/$partname &>/dev/null; then
+	echo "Failed to format the partition"
+	return 1
+    fi
+    
+    # Get the UUID
+    diskid=`lsblk -n -o UUID /dev/$partname`
+
+    # Check if ${mpoint} exists. If not, create it inside /media.
+    mpoint=/media/${diskid}
+    if [ ! -d "${mpoint}" ]; then
+	mkdir -p "${mpoint}"
+    fi 
+
+    # Have a directory ready for Sia hosting.
+    hostpoint=${mpoint}/HyperHost
+    
+    # Add the entry to fstab and mount it.
+    echo "UUID=${diskid}    ${mpoint}   ext4    defaults,noatime  0  1" >>/etc/fstab &&\
+	mount ${mpoint} &&\
+	if [ ! -d "${hostpoint}" ]; then
+	    mkdir "${hostpoint}"
+	fi &&\
+	    chown ${SIAUSR}:${SIAUSR} -R ${hostpoint}
+}
+
+format_and_add $1
+echo $hostpoint
+exit $?

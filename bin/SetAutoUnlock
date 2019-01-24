@@ -1,6 +1,0 @@
-#! /bin/bash
-unlocker=/usr/local/bin/unlocker
-cp ../bin/unlocker_base $unlocker
-pass=`printf '%q\n' "$1"`
-echo "curl -i -A "'"'"Sia-Agent"'"' "-X POST localhost:9980/wallet/unlock?encryptionpassword=$pass" >> $unlocker
-chmod 750 $unlocker

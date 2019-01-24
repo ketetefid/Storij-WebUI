@@ -1,0 +1,7 @@
+#! /bin/bash
+siacexe=/usr/bin/hsc
+checker=`$siacexe 2> /dev/null |grep Synced| awk '{print $2}'`
+while [ ! $checker == "Yes" ] || [[ -z  $checker  ]]; do
+    sleep 2
+    checker=`$siacexe 2> /dev/null |grep Synced| awk '{print $2}'`
+done

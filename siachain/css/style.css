@@ -1,0 +1,760 @@
+@import url("OpenSans.css");
+@import url("font-awesome.min.css");
+@import url("font-awesome-animation.min.css");
+
+*, *:before, *:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100vh;
+}
+
+body {
+    font: 16px/1 'Open Sans', sans-serif;
+    color: #555;
+    background: #eee;
+    background-color:#118fd8;
+}
+
+input[type="password"], input[type="text"] {
+    border:1.25px solid #9b94d1;
+}
+input[type="text"]:focus, input[type="password"]:focus {
+    background-color: #ccefff;
+    border:1.25px solid #00aeff;
+}
+
+/***Fix for fonts disappearing in Chrome***/
+body {
+    -webkit-animation-delay: 0.1s;
+    -webkit-animation-name: fontfix;
+    -webkit-animation-duration: 0.1s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: linear;
+}
+
+@-webkit-keyframes fontfix {
+    from { opacity: 1; }
+    to   { opacity: 1; }
+}
+/******************************************/
+h1 {
+    padding: 50px 0;
+    font-weight: 400;
+    text-align: center;
+}
+
+p {
+    margin: 0 0 20px;
+    line-height: 1.5;
+}
+
+section {
+    display: none;
+    padding: 20px 0 0;
+    border-top: 1px solid #ddd;
+}
+
+main {
+    text-align:center;
+    min-width: 920px; /* was 920 */
+    max-width: 1000px;
+    padding: 50px;
+    margin: 0 auto;
+    background: #fff;
+}
+
+/* Prevent textareas to be horizontally adjustable */
+textarea {
+    resize:vertical;
+}
+
+label.mainTabLabel {
+    display: inline-block;
+    margin: 0 0 -1px;
+    padding: 15px 30px;
+    font-size:24px;
+    font-weight: 700;
+    text-align: center;
+    color: #bbb;
+    border: 1px solid transparent;
+}
+
+label.mainTabLabel:before {
+    font-family: fontawesome;
+    font-weight: normal;
+    margin-right: 10px;
+}
+
+label[for*='1']:before {
+    content: '\f0ad';
+}
+
+label[for*='2']:before {
+    content: '\f0ac';
+}
+
+label[for*='3']:before {
+    content: '\f01c';
+}
+
+label[for*='4']:before {
+    content: '\f187';
+}
+
+label.mainTabLabel:hover {
+    color: #888;
+    cursor: pointer;
+}
+
+input.mainTabs:checked + label {
+    color: #555;
+    border: 1px solid #ddd;
+    background-color:#f49e42;
+    border-top: 2px solid orange;
+    border-bottom: 1px solid #fff;
+}
+
+#tab1:checked ~ #content1,
+#tab2:checked ~ #content2,
+#tab3:checked ~ #content3,
+#tab4:checked ~ #content4 {
+    display: block;
+}
+
+@media screen and (max-width: 650px) {
+    label {
+	font-size: 0;
+    }
+
+    label:before {
+	margin: 0;
+	font-size: 18px;
+    }
+}
+@media screen and (max-width: 400px) {
+    label {
+	padding: 15px;
+    }
+}
+
+input.configtxt
+{
+    font-size:18px;
+    font-family:'Open Sans', Sans Serif;
+    color:darkblue;
+    /**To make it aligned with FreeDns form**/
+    width:245px;
+    padding:1px 5px;
+}
+
+input.configsubmit
+{
+    font-size:18px;
+    font-family:'Open Sans', Sans Serif;
+    color:black;
+    width:80px;
+}
+
+/* Logout button */
+#logout {
+    background-color:#5b51b5;
+    color:white;
+    font-weight:bold;
+    font-size:18px;
+    cursor:pointer;
+    float:right;
+    padding:8px 16px;
+    margin-top:20px;
+    margin-right:20px;
+    position:absolute; top:0; right:0;
+    /* To make the next image be unaffected */
+    /*margin-left:-200px;*/
+}
+#logout:hover {
+    opacity: 0.8;
+}
+/* Chain selection button */
+#chains {
+    background-color:#5b51b5;
+    color:white;
+    font-weight:bold;
+    font-size:18px;
+    cursor:pointer;
+    float:right;
+    padding:8px 16px;
+    margin-top:20px;
+    margin-left:20px;
+    position:absolute; top:0; left:0;
+}
+#chains:hover {
+    opacity: 0.8;
+}
+
+/********************************************/
+/********************************************/
+/********************************************/
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #bdd7ef; /*#ccc;*/
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:disabled + .slider {
+    background-color: #ccc;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/**********Locked-Unlocked Slider************/
+.toggle-check input {
+    display:none;
+}
+
+.toggle-check-input {
+  width: 1px;
+  height: 1px;
+  position: absolute;
+}
+
+.toggle-check-text {
+  display: inline-block;
+  position: relative;
+  text-transform: uppercase;
+  background: #CCC;
+  padding: 0.35em 0.5em 0.35em 4.35em;
+  border-radius: 1em;
+  min-width: 2em;
+  color: #FFF;
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+
+.toggle-check-text:after {
+  content: ' ';
+  display: block;
+  background: #FFF;
+  width: 2.4em;
+  height: 1.2em;
+  border-radius: 1em;
+  position: absolute;
+  left: 0.3em;
+  top: 0.25em;
+  transition: left 0.25s, margin-left 0.25s;
+}
+
+.toggle-check-text:before {
+  content: 'Locked';
+}
+
+.toggle-check-input:checked ~ .toggle-check-text {
+  background: #8ad869;
+  padding-left: 0.5em;
+  padding-right: 2.9em;
+}
+
+.toggle-check-input:checked ~ .toggle-check-text:before {
+  content: 'Unlocked';
+}
+
+.toggle-check-input:checked ~ .toggle-check-text:after {
+  left: 100%;
+  margin-left: -2.7em;
+}
+
+/********************************************/
+/*******External IP Selection Slider*********/
+.toggle-check-ip input {
+    display:none;
+}
+
+.toggle-check-input-ip {
+  width: 1px;
+  height: 1px;
+  position: absolute;
+}
+
+.toggle-check-text-ip {
+  display: inline-block;
+  position: relative;
+  text-transform: uppercase;
+  background: #69d8d8;
+  padding: 0.35em 0.5em 0.35em 3.15em;
+  border-radius: 1em;
+  min-width: 2em;
+  color: #FFF;
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+
+.toggle-check-text-ip:after {
+  content: ' ';
+  display: block;
+  background: #FFF;
+  width: 2.4em;
+  height: 1.2em;
+  border-radius: 1em;
+  position: absolute;
+  left: 0.3em;
+  top: 0.25em;
+  transition: left 0.25s, margin-left 0.25s;
+}
+
+.toggle-check-text-ip:before {
+  content: 'Dynamic';
+}
+
+.toggle-check-input-ip:checked ~ .toggle-check-text-ip {
+  background: #8ad869;
+  padding-left: 0.5em;
+  padding-right: 3.1em;
+}
+
+.toggle-check-input-ip:checked ~ .toggle-check-text-ip:before {
+  content: 'Static';
+}
+
+.toggle-check-input-ip:checked ~ .toggle-check-text-ip:after {
+  left: 100%;
+  margin-left: -2.7em;
+}
+
+/********************************************/
+/********************************************/
+
+table.t1 th, table.t1 td {
+    /*border: 1px solid black;*/
+    font-size:18px;
+    font-family:ubuntu;
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+table.t1 {
+    margin-top:8px;
+    margin-bottom:16px;
+    margin-left: auto;
+    margin-right: auto;
+    width:90%;
+    background-color: powderblue;
+    /* #f1f1c1;*/
+    border-spacing: 5px;
+}
+
+table.t1 tr:nth-child(even) {
+    background-color: #eee;
+}
+table.t1 tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+table.t2 th, table.t2 td {
+    color:#544848;
+    font-size:20px;
+    font-family:ubuntu;
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+table.t2 th {
+    border: 5px solid #4682e2;
+    border-radius:10px;
+}
+
+table.t2 {
+    padding: 15px;
+    width:50%;
+    background-color: lightblue;
+    border-spacing: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:40px;
+    border-radius:10px;
+}
+
+.DrivePartsList{
+    /*Add auto to width. A numeric field will make it cross the parent table border*/
+    width:auto;
+    text-align:left;
+    padding:5px 5px 5px 5px;
+    border: 3px solid #c7d1e0;
+    margin:5px 35px 5px 35px;
+    vertical-align:middle;
+}
+
+.PartitionCheckbox {
+    transform: scale(1.2);
+}
+
+.FormatDriveCheckbox{
+    transform: scale(1.2);
+}
+
+.osActionButton {
+    height:50px;
+    width:200px;
+    font-size: 22px;
+    background-color: blue;
+    color:white;
+    cursor: pointer;
+    font-family:'Open Sans';
+    padding:8px 10px;
+}
+
+.HostActionButton {
+    height:50px;
+    width:200px;
+    font-size: 22px;
+    background-color: blue;
+    color:white;
+    cursor: pointer;
+    font-family:'Open Sans';
+    padding:8px 10px;
+    margin:15px 15px;
+}
+
+table#wait4sia {
+    text-align:center;
+    width:100%;
+    margin:30px auto;
+    padding:2px;
+}
+table#wait4sia th, table#wait4sia td {
+    vertical-align: middle;
+    font-size:20px;
+}
+
+fieldset { 
+    display: block;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 1.65em;
+    padding-top: 1.65em;
+    padding-bottom: 1.65em;
+    padding-left: 1.75em;
+    padding-right: 1.75em;
+    /*border: 15px groove (internal value);*/
+    border-width:2px;
+    border-style: solid;
+    border-radius: 25px;
+    border-color:lightgreen;
+}
+
+legend {
+    font-size:1.3em;
+    font:'Arial';
+    color:darkgreen;
+    text-align:left;
+    margin-left:35px;
+}
+
+.SendReceiveTags {
+    padding-top: 5px;
+    padding-right: 3px; /*40px*/
+    padding-bottom: 10px;
+    padding-left: 3px;
+    text-align: center;
+}
+
+label#amountSCLabel {
+    display: inline-block;
+    width: 30px;
+}
+
+input.InputSC {
+    font-size:15px;
+    font-family:'Open Sans', Sans Serif;
+    color:#8e291c;
+    width:680px;
+    margin-bottom: 15px;
+    padding:4px 6px;
+}
+
+input.SCvalue {
+    font-size:20px;
+    font-family:'Open Sans', Sans Serif;
+    color:#8e291c;
+    width:260px;
+    margin-bottom:15px;
+    padding:2px 4px;
+}
+
+input.SCvalue2 {
+    font-size:20px;
+    font-family:'Open Sans', Sans Serif;
+    color:#8e291c;
+    width:260px;
+    margin-bottom:15px;
+    padding:2px 4px;
+    margin-left:30px;
+}
+
+/****For printing host points****/
+input.HostPoint {
+    font-size:16px;
+    font-family:'Open Sans', Sans Serif;
+    color:#8e291c;
+    width:100%;
+    margin:5px 5px;
+    padding:5px 8px;
+    /*display:inline-flex;*/
+}
+
+label.HostLabels {
+    font-size:15px;
+    font-weight:bold;
+    /*display:inline-flex;*/
+    /*text-align: flex;*/
+}
+
+.HostConfigItems {
+    display:flex;
+    align-items:center;
+    justify-content:left;
+}
+table.twallet th, table.twallet td {
+    /*border: 1px solid black;*/
+    font-size:18px;
+    font-family:ubuntu;
+    padding: 15px;
+    text-align: center;
+    vertical-align: center;
+}
+
+table.twallet {
+    width:100%;
+}
+
+/* For creating space at the top and bottom of the horizontal line. */
+hr.line {
+    margin: 35px;
+}
+
+.DropDown {
+    font-size:15px;
+    font-family:'Open Sans';
+    padding: 10px;
+    text-align: center;
+    vertical-align: center;
+    margin-bottom:15px;
+}    
+
+.SendReceiveSCButton {
+    height:40px;
+    width:100px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color:white;
+    cursor: pointer;
+    margin-bottom:15px;
+}
+
+.InfoMessage {
+    height:10px;
+    color:blue;
+    font-family:'Arial';
+    font-size:15px;
+}
+
+.InfoMessage2 {
+    color:green;
+    font-family:'Open Sans';
+    font-size:16px;
+    font-weight:bold;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-top:10px;
+}
+
+.InfoMessage3 {
+    color:green;
+    font-family:'Open Sans';
+    font-size:16px;
+    font-weight:bold;
+    display:block;
+    /*overflow:scroll;*/
+    text-align:center;
+    margin-top:10px;
+}
+
+/********************The Dialog******************/
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 50%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.closemodal {
+    color: white;
+    font-size: 34px;
+    font-weight: bold;
+    vertical-align: middle;
+    /*text-align:right;*/
+    position:absolute;
+    top:6px;
+    right:8px;
+}
+
+.closemodal:hover, .closemodal:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding-top:8px;
+    padding-bottom:8px;
+    background-color:#2179a8 ;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    position:relative;
+    width: 100%;
+    line-height: 30px;
+    font-size:20px;
+}
+
+.modal-body {
+    padding:30px 20px;
+    vertical-align: middle;
+    font-size:18px;
+}
+
+.modal-footer {
+    /*padding: 20px 16px;*/
+    background-color: #5cb85c;
+    color: white;
+    padding-top:8px;
+    padding-bottom:8px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.OkCancelButton {
+    height:40px;
+    width:100px;
+    margin-left:30px;
+    margin-right:30px;
+    font-size: 18px;
+    background-color: red;
+    color:white;
+    cursor: pointer;
+    vertical-align: middle;
+    display: inline;
+}
+/***************End of Dialog**********************/
+
+
+/***************FreeDNS Login Info alignment*******************/
+.forFreeDNS, #FreeDNSLogin, #FreeDNSPass, #FreeDNSdomain {
+    display: inline-block;
+    vertical-align: baseline;
+    width: 145px;
+}
+.forFreeDNS {
+    text-align:left;
+    width: 100px;
+}
+
+#FreeDNSInfo, #FreeDNSLogin, #FreeDNSPass, #FreeDNSdomain {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+#FreeDNSInfo {
+    width: 245px;
+}
+/***************************************************************/

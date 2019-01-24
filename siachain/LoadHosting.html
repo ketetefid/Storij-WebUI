@@ -1,0 +1,366 @@
+<?php
+  require('php/CheckSession.php');
+  if ($scheck) {
+?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery.min.js">
+    </script>
+    <script src="js/LoadHosting.js">
+    </script>
+  </head>
+  <body>
+    <fieldset>
+      <legend>Host Space Allocation
+      </legend>
+      <table class="t1" id="HostingSpaceTable">
+	<col style="width:25%;">
+	<col style="width:75%;">
+	<?php
+          include 'php/GetDevices.php';
+          if ($numD>0) {
+              for ($i=0; $i<$numD; $i++) {
+    ?>
+	<tr>
+	  <td>
+	    <div style="margin-bottom:10px;">Drive No. <?php echo $i+1; ?></div>
+	    <span style="color:#8c1c1c;font-weight:bold;"><?php echo $listD["blockdevices"][$i]["model"]."-".$listD["blockdevices"][$i]["size"]; ?></span>
+	  </td>
+	  <td style="text-align:left;">
+	    <!-- This div contains all the data for both selecting the partition and the format option. -->
+	    <div id="WholeDevice<?php echo $i; ?>" class="WholeDevice">
+	      <!-- This div contians all the data except the format option. -->
+	      <div class="DrivePartsListMain" style="margin-bottom:20px;" id="DrivePartsListMain<?php echo $i; ?>">
+		<div style="margin-bottom:20px" id="ShowInfoAboutParts<?php echo $i; ?>">
+		  Add space from the selected partitions:
+		</div>
+		<?php
+                  $numP=@count($FlistD["blockdevices"][$i]["children"]);
+                  $k=0;
+                  for ($j=0; $j<$numP; $j++) {
+                      // We check if any partition is mounted or not.
+                      if ($FlistD["blockdevices"][$i]["children"][$j]["mountpoint"] != null) {
+                          $IsMounted[$i]=true;
+                      }
+                      // We exclude extended and swap and vfat partitions.
+                      if ($FlistD["blockdevices"][$i]["children"][$j]["parttype"] != "0xf" and $FlistD["blockdevices"][$i]["children"][$j]["fstype"]!="swap" and $FlistD["blockdevices"][$i]["children"][$j]["fstype"]!="vfat") {
+                          $k++;
+                          
+                          //List of partitions for each drive in a nice tabular way. -->
+                          $PName=$FlistD["blockdevices"][$i]["children"][$j]["name"];
+                          $PNameID=GetDevName($PName);
+                          // Making an ID for the surrounding div.
+                          $PNameID2=$PNameID.$PNameID;
+                          if (strcmp($SiaPart,$PName) == 0) {
+        ?>
+		<!-- We inform the user if the partition hosts the base directory of the Sia software. 
+		     Using a script will not work if we choose to refresh part of the page and not the whole.-->
+		<div class="DrivePartsList" id="<?php echo $PNameID2; ?>" style="background-color:#42f4cb;" title="This partition hosts the Sia software.">
+  		    <!-- Setting the partition names to the id (sda1, sdc5, etc.) -->
+		    <input type="checkbox" id="<?php echo $PNameID; ?>" class="PartitionCheckbox">
+
+		  <?php } else if (strcmp($Chain1Part,$PName) == 0) { ?>
+		    <div class="DrivePartsList" id="<?php echo $PNameID2; ?>" style="background-color:#ff9999;" title="This partition hosts another chain. You cannot choose it.">
+		    <!-- Setting the partition names to the id (sda1, sdc5, etc.) -->
+		    <input type="checkbox" id="<?php echo $PNameID; ?>" class="PartitionCheckbox" disabled>
+		      
+		  <?php } else { ?>
+		    <div class="DrivePartsList" id="<?php echo $PNameID2; ?>">
+		    <!-- Setting the partition names to the id (sda1, sdc5, etc.) -->
+		    <input type="checkbox" id="<?php echo $PNameID; ?>" class="PartitionCheckbox">
+		      
+		    <?php } ?>
+		    <label>
+		      Partition <span style="color:blue;font-weight:bold;"><?php echo ($j+1); ?></span>
+		      , size:<span style="color:blue;font-weight:bold;margin-left:5px;"><?php echo $FlistD["blockdevices"][$i]["children"][$j]["size"]; ?></span>
+		      , type:<span style="color:blue;font-weight:bold;margin-left:5px;"><?php echo $FlistD["blockdevices"][$i]["children"][$j]["fstype"]; ?></span>
+		    </label>
+		  </div>
+		  <?php }
+                    } ?>
+		</div>
+                <?php   if ($k==0) { ?>
+		<script>
+		  $(function() {
+		  // A script in situ to check if no usable partitions found, print suitable info.
+		  // The script should check on every loop.
+		  $("#DrivePartsListMain<?php echo $i; ?>").css("margin-bottom","0px");
+					 $("#ShowInfoAboutParts<?php echo $i; ?>").html("No usable partitions found.");
+														     });
+														     </script>
+		<?php } 
+                  $DName=$FlistD["blockdevices"][$i]["name"];
+                  if (!$IsMounted[$i]) { ?>
+		<input type="checkbox" id="<?php echo GetDevName($DName); ?>" class="FormatDriveCheckbox">
+		<?php } else { ?>
+		<input type="checkbox" id="<?php echo GetDevName($DName); ?>" class="FormatDriveCheckbox" title="This drive has mounted partitions. You must first unmount them all if you want to format the drive." disabled>
+		<?php } ?>
+		Erase all data and reformat into one partition.
+	      </div>
+	    </div>
+	  </td>
+	</tr>
+	<?php } ?>
+      </table>
+      <div style="text-align:center;vertical-align:middle;">
+	<input id="AddSpaceButton" type="button" value="Allocate Space" class="HostActionButton" style="width:170px;">
+      </div>
+      <div id="HostMessage" class="InfoMessage2">
+      </div>
+      <?php } else { ?>
+      <table class="t1" id="HostingSpaceTable">
+	<tr>
+	  <td>
+	    You have not attached any external HDD/SSD.
+	  </td>
+	</tr>
+      </table>
+      <?php } ?>
+    </fieldset>
+    <fieldset>
+      <legend>Sia Host Storage Configuration
+      </legend>
+      <table class="t1" id="HostingStorageConfigTable">
+	<col style="width:35%;">
+	<col style="width:65%;">
+	<tr>
+	  <td>
+	    Allocated Space
+	  </td>
+	  <td id="HostPointstd">
+	    <?php
+              if (file_exists('/boot/SiaBerry/SCHostPoints.txt')) {
+                  $hosts=file('/boot/SiaBerry/SCHostPoints.txt');
+                  $nh=1;
+                  if (count($hosts)>0) {
+                      foreach ($hosts as $host) {
+                          // To get a more precise answer, we get in MiB from the bash script.
+                          // To get it rouned to a lower 100 MiB, we multiply by 10, floor then divide by 10.
+                          // Finally we divide by 1024 to show it in GiB.
+                          // We trim it as PHP will throw notice at us.
+                          $AvailableSpace=number_format(floor(trim(shell_exec("bin/getfreespace $host"))*10/1024)/10,1,'.','');
+                          echo '<div class="StorageShower" style="vertical-align:middle;display:block;margin:30px 10px;"><div style="display:flex;"><input type="text" spellcheck="false" class="HostPoint" value="'.$host.'" readonly></div><div style="text-align:center;diaplay:inline"><input type="range" min=0 step=0.1 max='.$AvailableSpace.' value='.$AvailableSpace.' class="StorageSlider" id="hstorage'.$nh.'" style="margin-left:5px;float:left;width:70%;"><span style="margin:0px 20px;" class="StorageSliderVal">'.$AvailableSpace.' GiB'.'</span></div></div>';
+                          $nh++;
+                      }
+                  } else {
+                      echo '<div style="color:#a50b22;">There is no allocated space.</div>';
+                  }
+              } else {
+                  echo '<div style="color:#a50b22;">There is no allocated space.</div>';
+              }	      
+        ?>
+	  </td>
+	</tr>
+      </table>
+      <div style="text-align:center;vertical-align:middle;">
+	<input id="SaveStorageSettings" type="button" value="Set Storage" class="HostActionButton" style="width:180px;">
+      </div>
+      <div id="SaveStorageSettingsMessage" class="InfoMessage2"></div>
+    </fieldset>
+    
+    <fieldset>
+      <legend>Sia Host Configuration
+      </legend>
+      <table class="t1" id="HostingConfigTable">
+	<col style="width:35%;">
+	<col style="width:65%;">
+	<tr>
+	  <td>
+	    Host Address
+	  </td>
+	  <td>
+	    <?php
+              // Get the data ready.
+              include 'php/GetParameters.php';
+              if ( (trim($ext_ip_type)=="static" || $ext_ip_type=="1") && $use_domain==0) {
+                  echo '<div class="HostConfigItems"><input type="text" spellcheck="false" id="HostAddress4hosting" class="HostPoint" style="text-align:center;" value="'.$ext_ip.':'.$host_port.'" readonly title="The IP address or hostname (including port) that the host should be contacted at. This is already determined depending on your external IP type. If your IP type was set to static, the host will be configured by the static IP or a domain name. If you chose a dynamic type, the FreeDNS hostname will be the address."></div>';
+	      } else if ( (trim($ext_ip_type)=="static" || $ext_ip_type=="1") && $use_domain==1) {
+                  echo '<div class="HostConfigItems"><input type="text" spellcheck="false" id="HostAddress4hosting" class="HostPoint" style="text-align:center;" value="'.$domain_name.':'.$host_port.'" readonly title="The IP address or hostname (including port) that the host should be contacted at. This is already determined depending on your external IP type. If your IP type was set to static, the host will be configured by the static IP or a domain name. If you chose a dynamic type, the FreeDNS hostname will be the address."></div>';
+	      } else {
+                  echo '<div class="HostConfigItems"><input type="text" spellcheck="false" id="HostAddress4hosting" class="HostPoint" style="text-align:center;" value="'.$freedns_domain.':'.$host_port.'" readonly title="The IP address or hostname (including port) that the host should be contacted at. This is already determined depending on your external IP type. If your IP type was set to static, the host will be configured by the static IP. If you chose a dynamic type, the FreeDNS hostname will be the address."></div>';
+              }
+        ?>
+	  </td>
+	</tr>
+	
+	<tr>
+	  <td>
+	    Max Download Batch Size
+	  </td>
+	  <td>
+	    <div class="HostConfigItems">
+	      <input type="text" spellcheck="false" class="HostPoint" id="HCMaxDownloadBatchSize" placeholder="default : 17" style="width:65%;" title="The maximum size of a single download request from a renter. Each download request has multiple round trips of communication that exchange money. Larger batch sizes mean fewer round trips, but more financial risk for the host - the renter can get a free batch when downloading by refusing to provide a signature. [Optional]">
+	      <label class="HostLabels" for="HCMaxDownloadBatchSize">MiB</label>
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    Max Duration
+	  </td>
+	  <td>
+	    <div class="HostConfigItems">
+	      <input type="text" spellcheck="false" class="HostPoint" id="HCMaxDuration" placeholder="default : 180" style="width:65%;" title="The maximum duration of a file contract that the host will accept. The storage proof window must end before the current height maxduration. [Optional]">
+	      <label class="HostLabels" for="HCMaxDuration">Days (<span id="HCMaxDuration2block" style="margin-right:5px;">25920</span>Blocks)</label>
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    Max Revised Batch Size
+	  </td>
+	  <td>
+	    <div class="HostConfigItems">
+	      <input type="text" spellcheck="false" class="HostPoint" id="HCMaxRevisedBatchSize" placeholder="default : 17" style="width:65%;" title="The maximum size of a single batch of file contract revisions. The renter can perform DoS attacks on the host by uploading a batch of data then refusing to provide a signature to pay for the data. The host can reduce this exposure by limiting the batch size. Larger batch sizes allow for higher throughput as there is significant communication overhead associated with performing a batch upload. [Optional]">
+	      <label class="HostLabels" for="HCMaxRevisedBatchSize">MiB</label>
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    Window Size
+	  </td>
+	  <td>
+	    <div class="HostConfigItems">
+	      <input type="text" spellcheck="false" class="HostPoint" id="HCWindowSize" placeholder="default : 1" style="width:65%;" title="The storage proof window is the number of blocks that the host has to get a storage proof onto the blockchain. The window size is the minimum size of window that the host will accept in a file contract. [Optional]">
+	      <label class="HostLabels" for="HCWindowSize">Days (<span id="HCWindowSize2block" style="margin-right:5px;">144</span>Blocks)</label>
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    Collateral
+	  </td>
+	  <td>
+	    <div class="HostConfigItems">
+	      <input type="text" spellcheck="false" class="HostPoint" id="HCCollateral" placeholder="default : 100" style="width:65%;" title="The Amount of Siacoins you are willing to place in the contract to be held for collateral. So 50 would mean you are willing to place 50SC per TB per Month in collateral on every contract you sign. [Optional]">
+	      <label class="HostLabels" for="HCCollateral">SC/TB/Month</label>
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    Collateral Budget
+	  </td>
+	  <td>
+	    <div class="HostConfigItems">
+	      <input type="text" spellcheck="false" class="HostPoint" id="HCCollateralBudget" placeholder="default : 100000" style="width:65%;" title="This is the amount of Siacoins you are willing to put up as the collateral in total for all contracts to be held by your host. So 1000000 would mean you are willing to put up 1 million Siacoins in total for all of the contracts you will be holding. [Optional]">
+	      <label class="HostLabels" for="HCCollateralBudget">SC</label>
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    Max Collateral
+	  </td>
+	  <td>
+	    <div class="HostConfigItems">
+	      <input type="text" spellcheck="false" class="HostPoint" id="HCMaxCollateral" placeholder="default : 5000" style="width:65%;" title="This is the maxiumum amount of SC you are allowing your host to setup each contract with. The Default is 5000SC which means that it would limit the max collateral to 5000SC per contract. [Optional]">
+	      <label class="HostLabels" for="HCMaxCollateral">SC</label>
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    Minimum Contract Price
+	  </td>
+	  <td>
+	    <div class="HostConfigItems">
+	      <input type="text" spellcheck="false" class="HostPoint" id="HCMinContractPrice" placeholder="default : 3" style="width:65%;" title="The minimum price that the host will demand from a renter when forming a contract. Typically this price is to cover transaction fees on the file contract revision and storage proof, but can also be used if the host has a low amount of collateral. The price is a minimum because the host may automatically adjust the price upwards in times of high demand. [Optional]">
+	      <label class="HostLabels" for="HCMinContractPrice">SC</label>
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    Minimum Download Price
+	  </td>
+	  <td>
+	    <div class="HostConfigItems">
+	      <input type="text" spellcheck="false" class="HostPoint" id="HCMinDLPrice" placeholder="default : 25" style="width:65%;" title="The minimum price that the host will demand from a renter when the renter is downloading data. If the host is saturated, the host may increase the price from the minimum. [Optional]">
+	      <label class="HostLabels" for="HCMinDLPrice">SC/TB</label>
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    Minimum Upload Price
+	  </td>
+	  <td>
+	    <div class="HostConfigItems">
+	      <input type="text" spellcheck="false" class="HostPoint" id="HCMinUpPrice" placeholder="default : 1" style="width:65%;" title="The minimum price that the host will demand from a renter when the renter is uploading data. If the host is saturated, the host may increase the price from the minimum. [Optional]">
+	      <label class="HostLabels" for="HCMinUpPrice">SC/TB</label>
+	    </div>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    Minimum Storage Price
+	  </td>
+	  <td>
+	    <div class="HostConfigItems">
+	      <input type="text" spellcheck="false" class="HostPoint" id="HCMinStoragePrice" placeholder="default : 50" style="width:65%;" title="The minimum price that the host will demand when storing data for extended periods of time. If the host is low on space, the price of storage may be set higher than the minimum. [Optional]">
+	      <label class="HostLabels" for="HCMinStoragePrice">SC/TB/Month</label>
+	    </div>
+	  </td>
+	</tr>
+	
+      </table>
+      <div style="text-align:center;vertical-align:middle;">
+	<input id="SaveHostSettings" type="button" value="Apply Settings" class="HostActionButton" style="width:180px;">
+	<input id="AnnounceButton" type="button" value="Announce" class="HostActionButton" style="width:180px;">
+      </div>
+      <div id="SaveSettingsMessage" class="InfoMessage2"></div>
+    </fieldset>
+    
+    <!-- ---Modal Windows Definition--- -->
+    <!-- The Modal for Confirming Actions -->
+    <div id="AddSpaceModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+	<div class="modal-header">
+	  <b>Confirm Your Selection
+	  </b>
+	  <span class="closemodal" id="closeAddSpace">&#10799;
+	  </span>
+	</div>
+	<div class="modal-body" id="AddSpaceInfo" style="text-align:center;">
+	  Is your selection final?
+	</div>
+	<div class="modal-footer" id="AddSpaceFooter">
+	  <input type="button" value="Confirm" id="confirmAddSpace" class="OkCancelButton">
+	  <input type="button" value="Cancel" id="cancelAddSpace" class="OkCancelButton">
+	</div>
+      </div>
+    </div>
+    <!-- --------------------------------- -->
+    <!-- The Modal for Announcing the Host -->
+    <div id="AnnounceHostModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+	<div class="modal-header">
+	  <b>Confirm The Announcement
+	  </b>
+	  <span class="closemodal" id="closeAnnounceHost">&#10799;
+	  </span>
+	</div>
+	<div class="modal-body" id="AnnounceHostInfo" style="text-align:center;">
+	  <p>Please make sure that you have first applied your settings, if the defaults are not desired.</p><p><b>Are you ready to announce your host?</b></p>
+	</div>
+	<div class="modal-footer" id="AnnounceHostFooter">
+	  <input type="button" value="Confirm" id="confirmAnnounceHost" class="OkCancelButton">
+	  <input type="button" value="Cancel" id="cancelAnnounceHost" class="OkCancelButton">
+	</div>
+      </div>
+    </div>
+    <!-- --------------------------------- -->
+  </body>
+</html>
+<?php
+  } else {
+      exit();
+  }
+?>

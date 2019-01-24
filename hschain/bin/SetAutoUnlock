@@ -1,0 +1,6 @@
+#! /bin/bash
+unlocker=/usr/local/bin/xscunlocker
+cp ../bin/unlocker_base $unlocker
+pass=`printf '%q\n' "$1"`
+echo "curl -i -A "'"'"Hyperspace-Agent"'"' "-X POST localhost:5580/wallet/unlock?encryptionpassword=$pass" >> $unlocker
+chmod 750 $unlocker

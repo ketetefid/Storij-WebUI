@@ -1,0 +1,73 @@
+#! /bin/bash
+# Get $SIAUSR ready.
+source /boot/SiaBerry/parameters.txt
+
+# Get the UUID of the partition
+# by blkid:  diskid=$(/usr/bin/sudo /sbin/blkid -s UUID -o value /dev/$1)
+
+diskid=$(sudo lsblk -n -o UUID /dev/$1)
+
+# Check if the device with the UUID or kname does not already exists in /etc/fstab
+if ! grep -q ${diskid} /etc/fstab && ! grep -q /dev/$1 /etc/fstab
+then
+
+    # Check if ${mpoint} exists. If not, create it inside /media.
+    mpoint=/media/${diskid}
+    if [ ! -d "${mpoint}" ]; then
+	mkdir -p "${mpoint}"
+    fi 
+
+    # Have a directory ready for Sia hosting.
+    hostpoint=${mpoint}/SiaHost
+
+    # Checking the fstype.
+    fstype=`sudo lsblk /dev/$1 -no FSTYPE`
+
+    # Add the entry to fstab and mount it.
+    # Also, create a directory of Sia hosting on it and chown it to the $SIAUSR
+    if [ $fstype == "ntfs-3g" ]; then
+	moptions="noatime,rw  0  0"
+    elif [ $fstype == "ext4" ] || [ $fstype == "ext3" ]; then
+	moptions="defaults,noatime  0  1"
+    elif [ $fstype == "btrfs" ]; then
+	moptions="defaults,noatime  0  0"
+    elif [ $fstype == "vfat" ]; then
+	moptions="defaults  0  2"
+    else
+	moptions="defaults  0  0"
+    fi
+
+    sudo /bin/echo "UUID=${diskid}    ${mpoint}   $fstype    $moptions" >>/etc/fstab	     
+    sudo /bin/mount ${mpoint} &&\
+	if [ ! -d "${hostpoint}" ]; then
+	    mkdir "${hostpoint}"
+	fi &&\
+	    chown ${SIAUSR}:${SIAUSR} -R ${hostpoint}
+else
+
+    # So, the device has a mountpoint in fstab. We get the path by it UUID or its kernel name
+    if grep -q ${diskid} /etc/fstab
+    then
+	mpoint2=`grep ${diskid} /etc/fstab | awk '{print $2}'`
+    else
+	mpoint2=`grep /dev/$1 /etc/fstab | awk '{print $2}'`
+    fi
+
+    # If it is not mounted, mount it first.
+    # systemd version: if ! sudo test grep -q ${mpoint2} /proc/mounts #should be checked further
+    if ! grep -q ${mpoint2} /proc/mounts
+    then
+	# systemd cannot mount as apache in this script
+	sudo /bin/mount ${mpoint2}
+	#&>/dev/null
+    fi
+
+    # Then, create the SiaHost directory if needed, and chown it to $SIAUSR
+    hostpoint=${mpoint2}/SiaHost
+    if [ ! -d "${hostpoint}" ]; then
+	mkdir ${hostpoint}
+    fi
+    chown ${SIAUSR}:${SIAUSR} -R ${hostpoint}
+
+fi
+echo ${hostpoint}

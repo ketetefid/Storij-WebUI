@@ -1,0 +1,60 @@
+<?php
+  require('php/CheckSession.php');
+  if (!$scheck) {
+    header("Location:index.html");
+    exit();
+  }
+?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="auther" content="<?= $_SESSION['authenticator']; ?>">
+    <title>SiaBerry OS, Hosting and Renting Platform
+    </title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery.min.js">
+    </script>
+  </head>
+  <body>
+    <form action="ActionPage.php" method="post">
+      <input type="submit" value="Log Out" id="logout" name="logout">
+    </form>
+    <h1 style="font-size:300%;color:white;text-align:middle;margin-bottom:-40px;">
+      <img src="img/Siaberry.png" alt="Siacoin Logo" style="height:200px;vertical-align:middle">
+      <br>
+      <b>SiaBerry WebUI
+      </b>
+    </h1>
+    <table class="t2">
+      <col style="width:50%">
+      <col style="width:50%">
+      <tr>
+	<th colspan="2">
+	  <h2>Chain Selection
+	  </h2>
+	</th>
+      </tr>
+      <tr>
+	<td>
+	  <a href="http://<?=shell_exec('source /etc/conf.d/hostname && echo $hostname').'.local:81'; ?>" target="_blank" style="color: inherit;text-decoration: none;"><input type="button" class="osActionButton" value="HyperSpace" id="OpenHyperSpace"></a>
+	</td>
+	<td>
+	  <a href="http://<?=shell_exec('source /etc/conf.d/hostname && echo $hostname').'.local:82'; ?>" target="_blank" style="color: inherit;text-decoration: none;"><input type="button" class="osActionButton" value="SiaCoin" id="OpenSiaCoin"></a>
+	</td>
+      </tr>
+    </table>
+    
+    <script>
+      // To check for auto-logout every 35s.
+      setInterval(function(){
+	  $.get("CheckSessionHome.php", function(data){
+	      if (data!=="1") {
+		  window.onbeforeunload=null;
+		  window.location.replace("index.html?status=expired");
+	      }
+	  });
+      },35000);
+    </script>
+  </body>
+</html>

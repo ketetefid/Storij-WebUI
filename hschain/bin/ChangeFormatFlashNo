@@ -1,0 +1,2 @@
+#! /bin/bash
+/bin/sed -i 's,^\([ ]*setup_xsc[ ]*=\).*,\1'0',g' /boot/SiaBerry/parameters.txt

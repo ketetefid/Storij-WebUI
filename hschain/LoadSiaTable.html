@@ -1,0 +1,302 @@
+<?php
+  require('php/CheckSession.php');
+  if ($scheck) {
+?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/style.css">
+    <?php include 'php/CWApiCalls.php'; ?>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/LoadSiaTablefunc.js"></script>
+  </head>
+  <body>
+    <fieldset>
+      <legend>General Information
+      </legend>
+      
+      <table class="t1">
+	<?php if (file_exists('/boot/SiaBerry/XSCSyncStep1')) { ?>
+	<caption>
+	  <div class="InfoMessage2" style="font-size:20px;">
+            Preparing the attached drive: <i class="fa fa-cog fa-spin fa-2x fa-fw"></i>
+	  </div>
+	  <div class="InfoMessage2" style="color:blue;">
+	    <?= file_get_contents('/etc/SiaBerry/XSC-DevSetup');?>
+	  </div>
+	</caption>
+	<?php } else if (file_exists('/boot/SiaBerry/XSCSyncStep2a')) { ?>
+	<caption>
+	  <div class="InfoMessage2" style="font-size:20px;">
+	    Downloading or continuing the download of consensus.db ...<i class="fa fa-cog fa-spin fa-2x fa-fw"></i>
+	  </div>
+	  <div class="InfoMessage2" style="color:blue;">
+	    <?php echo shell_exec("sed 'x;$!d' </wget-log"); ?>
+	  </div>
+	</caption>
+	<?php } else if (file_exists('/boot/SiaBerry/XSCSyncStep2b')) { ?>
+	<caption>
+	  <div class="InfoMessage2" style="font-size:20px;">
+	    Downloading or continuing the download of pre-verified layout ...<i class="fa fa-cog fa-spin fa-2x fa-fw"></i>
+	  </div>
+	  <div class="InfoMessage2" style="color:blue;">
+	    <?php echo shell_exec("sed 'x;$!d' </wget-log"); ?>
+	  </div>
+	</caption>
+	<?php } else if (file_exists('/boot/SiaBerry/XSCSyncStep3a') or file_exists('/boot/SiaBerry/XSCSyncStep3b')) { ?>
+	<caption>
+	  <div class="InfoMessage2" style="font-size:20px;">
+	    Updating HyperSpace and the structure in the drive:<i class="fa fa-cog fa-spin fa-2x fa-fw"></i>
+	  </div>
+	  <br>
+	  <div class="InfoMessage2" style="color:blue;">
+	    <p><?= file_get_contents('/etc/SiaBerry/XSC-DevSetup');?></p>
+	  </div>
+	  <p><b>The system will reboot itself once everything is set.</b></p>
+	</caption>
+	<?php } else if ($siastatus==0 and trim(shell_exec("if pgrep -x hsd &>/dev/null; then echo yes; fi"))=="yes") { ?>
+	<caption>
+	  <div class="InfoMessage2" style="font-size:20px;">
+	    Verifying the blockchain ...<i class="fa fa-cog fa-spin fa-2x fa-fw"></i>
+	  </div>
+	  <br>
+	  <div class="InfoMessage2" style="color:blue;">
+	    This might take a long time up to 12 or even 24 hours. Please be patient.
+	  </div>
+	</caption>
+	<?php } else if ($siastatus==0 and trim(shell_exec("if pgrep -x hsd &>/dev/null; then echo yes; fi"))!="yes") { ?>
+	<caption>
+	  <div style="padding:20px;font-size:150%;color:red;">
+	    <b>HyperSpace daemon is not running!
+	    </b>
+	    <br>
+	  </div>
+	  <div style="padding:20px;text-align:left;line-height: 150%;text-align:justify;">
+	    To use HyperSpace, you need to set it up utilizing the functionality in the previous tab. It will automatically prepare the HyperSpace software on the next boot. However, if you have already done this, or if you know that you have already configured the options, you can start the daemon here:
+	    <br>
+	  </div>
+	  <input type="submit" value="Start HS Daemon"  class="osActionButton" style="height:50px;width:200px" id="runsiadsubmit">
+	</caption>
+	<?php } else { ?>
+	<tr>
+	  <td>Synced Status
+	  </td>
+	  <td>
+	    <?php if ($syncedstat) { ?>
+	    <span style="color:green;font-weight:bold;">
+	      YES :)
+	    </span>
+	    <?php } else {
+    	      // Reading from the crontab script output
+    	      $response=file_get_contents ('/tmp/CommonAPI');
+	      $datac = json_decode($response);
+	      @$currentheight=$datac->height;
+	      @$pdone=number_format(($height/$currentheight)*100,4);
+	      $bremaining=$currentheight-$height; ?>
+	    <span id="SyncStatus" style="color:red;font-weight:bold;">
+	      
+	    </span>
+	    <input id="SyncStatusCheck" hidden>
+	    <input id="SyncStatusCheckVal2" value="<?php echo $pdone; ?>" hidden>
+	    <input id="SyncStatusCheckVal3" value="<?php echo $bremaining; ?>" hidden>	    
+	    <script>
+		    $(function(){
+			if (sessionStorage.syncType==1 || typeof sessionStorage.syncType == 'undefined' ) {
+			    $("#SyncStatus").html("Not Yet :(");
+			    sessionStorage.syncType=1;
+			}
+			if (sessionStorage.syncType==2) {
+			    $("#SyncStatus").html("<?php echo $pdone.'%'; ?>");
+			}
+			if (sessionStorage.syncType==3) {
+			    $("#SyncStatus").html("<?php echo $bremaining.' remaining blocks'; ?>");
+			}
+		    });
+	    </script>
+	    <?php } ?>
+	  </td>
+	</tr>
+	<tr>
+          <td>Block Height
+	  </td>
+          <td>
+	    <?php
+	      echo $height;
+	    ?>
+	  </td>
+	</tr>
+	<tr>
+          <td>Difficulty
+	  </td>
+          <td>
+            <?php
+	      echo $difficulty;
+	    ?>
+          </td>
+	</tr>
+	<tr>
+	  <td>
+	    Initialization Status
+	  </td>
+	  <td>
+	    <!-- Storing the initialization status in a variable to retrieve it on LoadOSConfig.html for auto-unlock feature-->
+	    <?php if ($isInitialized) { ?>
+	    <input id="checkIfInitialized" value="1" type="hidden">
+	    <span style="color:green"> <b>Initialized</b></span>
+	    <?php } else { ?>
+	    <input id="checkIfInitialized" value="0" type="hidden">
+	    <span style="color:red"> <b>Uninitialized</b></span>
+	    <?php } ?>
+	  </td>
+	</tr>
+	
+	<tr>
+	  <td>
+	    Wallet Lock Status
+	  </td>
+	  <td>
+	    <?php if ($wUnlocked){ ?>
+	    <label class="toggle-check">
+	      <input id="unlockWallet" type="checkbox" class="toggle-check-input" checked />
+	      <span class="toggle-check-text">
+	      </span>
+	    </label>
+	    <?php } else if ($IsScanning) { ?>
+	    <span style="color:purple"><b>Scanning...</b></span>
+	    <?php } else { ?>
+	    <label class="toggle-check">
+	      <input id="unlockWallet" type="checkbox" class="toggle-check-input" />
+	      <span class="toggle-check-text">
+	      </span>
+	    </label>
+	    <?php } ?>
+	  </td>
+	</tr>
+	<tr>
+          <td>Wallet Balance
+          </td>
+          <td>
+            <?php
+	      echo $scoins;
+	    ?>
+	    XSC
+          </td>
+	</tr>
+	<tr>
+	  <td>
+	    Incoming SpaceCash
+	  </td>
+	  <td>
+            <?php
+              echo $scoinsin;
+	    ?>
+            XSC
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    Outgoing SpaceCash
+	  </td>
+	  <td>
+            <?php
+	      echo $scoinsout;
+	    ?>
+            XSC
+	  </td>
+	</tr>
+	<!--
+	<tr>
+	  <td>
+	    Siafunds Balance
+	  </td>
+	  <td>
+	    <?php
+	      echo $sfunds;
+	    ?>
+	    SF
+	  </td>
+	</tr>
+	-->
+      </table>
+    </fieldset>
+    <fieldset>
+      <legend>Wallet Initialization
+      </legend>
+      <table class="t2" style="margin-top:0px;">
+	<?php if ($isInitialized) { ?>
+	<tr>
+	  <td colspan="2">
+	    Your wallet is initialized.
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    <input id="viewSeed" type="button" value="View Your Seed" class="SendReceiveSCButton" style="width:160px">
+	  </td>
+	  <td>
+	    <input id="sweepSeed" type="button" value="Sweep A Seed" class="SendReceiveSCButton" style="width:160px">
+	  </td>
+	</tr>
+	<!--
+	<tr>
+	  <td>
+	    <p>Your wallet is initialized.</p>
+	  </td>
+	</tr>-->
+	<?php } else if ($IsScanning) { ?>
+	<tr>
+	  <td>
+	    <p>The wallet is scanning. Please wait.</p>
+	  </td>
+	</tr>
+	<?php } else { ?>
+	
+	<col style="width:50%">
+	<col style="width:50%">
+	<tr>
+	  <td colspan="2">
+	    Initialize The Wallet By:
+	  </td>
+	</tr>
+	
+	<tr>
+	  <td>
+	    <?php if ($syncedstat) { ?>
+	    <input id="initWithExisting" type="button" value="An Existing Seed" class="SendReceiveSCButton" style="width:160px">
+	    <?php } else { ?>
+	    <input id="initWithExisting" type="button" value="An Existing Seed" class="SendReceiveSCButton" style="width:160px;background-color:lightgreen;" title="You cannot initialize the wallet from an existing seed when the software is not synced yet. Please wait until it is completely synced." disabled>
+	    <?php } ?>
+	  </td>
+	  <td>
+	    <input id="initWithNew" type="button" value="A New Seed" class="SendReceiveSCButton" style="width:160px">
+	  </td>
+	</tr>
+      </table>
+      <?php } ?>
+      <!-- The Modal for Wallet -->
+      <div id="initWalletModal" class="modal">
+	<!-- Modal content -->
+	<div class="modal-content">
+	  <div class="modal-header">
+	    <b><span id="walletModalHeaderTitle">Wallet Initialization</span>
+	    </b>
+	    <span class="closemodal" id="closeInitWalletInfo">&#10799;
+	    </span>
+	  </div>
+	  <div class="modal-body" id="initWalletInfo" style="text-align:center;">
+	  </div>
+	  <div class="modal-footer" id="initWalletFooter">
+	    <input type="button" value="Initialize" id="initTheWallet" class="OkCancelButton">
+	  </div>
+	</div>
+      </div>
+    </fieldset>
+    <?php } ?>
+  </body>
+</html>
+<?php
+	} else {
+    exit();
+  }
+?>
