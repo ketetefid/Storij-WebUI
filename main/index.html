@@ -19,7 +19,19 @@
   <body>
     <h1>Welcome to SiaBerryOS</h1>
     <div id="maindiv">
-      <form name="mainForm" method="post" action="ActionPage.php">
+      <form name="mainForm" method="post" action="ActionPage.php" onsubmit="return checkTZ()">
+	<?php
+	 $tzlist = DateTimeZone::listIdentifiers(DateTimeZone::ALL); ?>
+	<select name="TimezoneList" id="TimezoneList" style="font-size:20px;" class="DropDown">
+	  <option selected="selected" style="vertical-align: center;">Select your timezone:
+	  </option>
+	  <?php
+	   foreach ($tzlist as $key => $value) { ?>
+	  <option value="<?php echo $value; ?>">
+	    <?php echo $value; ?>
+	  </option>
+	  <?php } ?>
+	</select>
 	<p class="p2"> Save your 2FA secret in a safe place:</p>
 	<p class="p2"><?php echo $secret  ?></p>
 	<img src=<?php echo $qrCodeUrl;?> >
@@ -31,6 +43,15 @@
 	</div>
       </form>
     </div>
+    <script>
+      function checkTZ() {
+	  var tz = document.forms["mainForm"]["TimezoneList"].value;
+	  if ( tz == 'Select your timezone:') {
+              alert ('Please choose your timezone.');
+	      return false;
+	  }
+      }
+    </script>
   </body>
 </html>
 
