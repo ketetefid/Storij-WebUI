@@ -55,7 +55,7 @@ if (isset($_POST['twoFAsec'])) {
   $tzone=$_POST['TimezoneList'];
   file_put_contents ('/etc/SiaBerry/2fa-secret',$twoFAsec);
   file_put_contents ('/etc/SiaBerry/timezone',$tzone);
-  exec("/usr/local/bin/settimezone");
+  exec("sudo /usr/local/bin/settimezone");
   unset($twoFAsec);
   header('Location: index.html?status=2FA_EN');
   exit();
