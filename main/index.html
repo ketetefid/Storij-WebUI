@@ -1,6 +1,6 @@
 <?php
   require_once 'php/GoogleAuthenticator.php';
-  $tfsecret=trim(file_get_contents('/etc/SiaBerry/2fa-secret'));
+  $tfsecret=@trim(file_get_contents('/etc/SiaBerry/2fa-secret'));
   if ($tfsecret == '') {
       $tfauth = new PHPGangsta_GoogleAuthenticator();
       $secret = $tfauth->createSecret();
