@@ -208,6 +208,24 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
+    $("#disk_layoutsubmit").click(function(e){
+        var disk_layoutval=$("#disk_layout").val();
+	if (/^msdos$/.test(disk_layoutval) || /^gpt$/.test(disk_layoutval)) {
+            $.ajax({
+		url: "js/SetParams.php",
+		type: "POST",
+		cache : false,
+		headers : { 'auther': $('meta[name="auther"]').attr('content') },
+		data: { disk_layout : "disklayout" , disk_layoutval : disk_layoutval}
+            });
+	} else {
+	    e.preventDefault();
+	    alert("Please enter either gpt or msdos.");
+	}
+    });
+});
+
+$(document).ready(function(){
     $("#domain_namesubmit").click(function(){
         var domain_nameval=$("#domain_name").val();
         $.ajax({

@@ -13,4 +13,5 @@ $ext_ip_type = shell_exec('source /boot/SiaBerry/parameters.txt; echo $ext_ip_ty
 $freedns_login = shell_exec('source /boot/SiaBerry/parameters.txt; echo $freedns_login');
 $freedns_domain = shell_exec('source /boot/SiaBerry/parameters.txt; echo $freedns_domain');
 $use_domain = shell_exec('source /boot/SiaBerry/parameters.txt; echo $use_domain');
+$disk_layout = shell_exec('source /boot/SiaBerry/parameters.txt; echo $disklayout');
 ?>

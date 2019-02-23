@@ -107,6 +107,12 @@ if ( isset($_SESSION['uname']) and isset($_SESSION['authenticator']) and
     $host_portval = $_POST['host_portval'];
     exec("../bin/SetParams '$host_port' '$host_portval'");
   }
+  // Checking for disk_layout
+  if(isset($_POST['disk_layout'])){
+    $disklayout = $_POST['disk_layout'];
+    $disklayoutval = $_POST['disk_layoutval'];
+    exec("../bin/SetParams '$disklayout' '$disklayoutval'");
+  }
   // Checking for domain_name
   if(isset($_POST['domain_nameval'])){
     $domain_name = $_POST['domain_name'];

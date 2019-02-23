@@ -171,6 +171,18 @@
 	  </form>
         </td>
       </tr>
+
+      <tr>
+	<td>
+	  Disk layout
+	</td>
+	<td>
+	  <form method="post">
+            <input type="text" spellcheck="false" class="configtxt" name="disk_layout" value=<?php echo $disk_layout ?> size="20" id="disk_layout" title="Choose between msdos or gpt for the partition table of disks. If you are utilizing ARM64, always use gpt. For AMD64, gpt is of course better but some UEFI systems corrupt the GPT table of the attached hard disks. In that case you need to use msdos. [default:gpt]">
+	    <input type="submit" class="configsubmit" value="Set it!" id="disk_layoutsubmit">
+	  </form>
+	</td>
+      </tr>
       
       <tr>
 	<td>
