@@ -319,7 +319,7 @@ $(document).ready(function () {
     // When the user clicks on shutdown, a modal will be shown asking for confirmation.
     $("#shutdownButton").click(function (){
 	$("#OSactionModal").show();
-	$("#OSactionInfo").html("<p>Are you sure you want to <b>shutdown</b>?</p>If you are intending to move the Pi to another network, make sure that you have set the LAN IP to auto.");
+	$("#OSactionInfo").html("<p>Are you sure you want to <b>shutdown</b>?</p>If you are intending to move the device to another network, make sure that you have set the LAN IP to auto.");
 	$("#confirmRebootAction").hide();
 	$("#confirmShutAction").show();
     });
