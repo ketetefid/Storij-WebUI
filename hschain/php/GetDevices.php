@@ -1,5 +1,5 @@
 <?php
-$siadir=shell_exec('source /boot/SiaBerry/parameters.txt && echo $XSCDIR');
+$siadir=shell_exec('source /boot/storij/parameters.txt && echo $XSCDIR');
 // Only list SCSI HDDs:8. Exclude Ram disks, CD Roms and SD cards:1,11,179
 $deviceInfo=shell_exec("sudo lsblk -I 8 -pdJo NAME,SIZE,MODEL");
 $FulldeviceInfo=shell_exec("sudo lsblk -I 8 -pJo NAME,SIZE,FSTYPE,PARTTYPE,MOUNTPOINT,UUID,MODEL,TRAN,VENDOR");
@@ -19,7 +19,7 @@ $IsSiaOnIt=array_fill(0,$numD,false);
 $SiaPart=trim(shell_exec("bin/SiaPartChecker $siadir"));
 
 // Identify the partitions that host the other chains
-$chain1dir=shell_exec('source /boot/SiaBerry/parameters.txt && echo $SCDIR');
+$chain1dir=shell_exec('source /boot/storij/parameters.txt && echo $SCDIR');
 $Chain1Part=trim(shell_exec("bin/SiaPartChecker $chain1dir"));
 
 // A function to give "sda2" from "/dev/sda2"

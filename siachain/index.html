@@ -11,7 +11,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="auther" content="<?= $_SESSION['authenticator']; ?>">
-    <title>SiaBerry OS, Hosting and Renting Platform on Sia
+    <title>Storij OS, Storage Hosting Platform on Sia
     </title>
     <link rel="stylesheet" href="css/style.css">
     <?php include 'php/CWApiCalls.php'; ?>
@@ -24,12 +24,12 @@
       <input type="submit" value="Log Out" id="logout" name="logout">
     </form>
     <h1 style="font-size:350%;color:white;text-align:middle;margin-bottom:-40px;margin-top:-20px;">
-      <img src="img/Siaberry_banner.png" alt="SiaBerry banner" style="height:250px;vertical-align:middle">
+      <img src="img/Storij_banner.png" alt="Storij banner" style="height:250px;vertical-align:middle">
     </h1>
-    <?php  $xscsetup = shell_exec('source /boot/SiaBerry/parameters.txt; echo $setup_xsc');
-            if ($xscsetup == 1 || $xscsetup == 2 || file_exists('/boot/SiaBerry/XSCSyncStep1') ||
-              file_exists('/boot/SiaBerry/XSCSyncStep2a') || file_exists('/boot/SiaBerry/XSCSyncStep2b') ||
-              file_exists('/boot/SiaBerry/XSCSyncStep3a') || file_exists('/boot/SiaBerry/XSCSyncStep3b')) {
+    <?php  $xscsetup = shell_exec('source /boot/storij/parameters.txt; echo $setup_xsc');
+            if ($xscsetup == 1 || $xscsetup == 2 || file_exists('/boot/storij/XSCSyncStep1') ||
+              file_exists('/boot/storij/XSCSyncStep2a') || file_exists('/boot/storij/XSCSyncStep2b') ||
+              file_exists('/boot/storij/XSCSyncStep3a') || file_exists('/boot/storij/XSCSyncStep3b')) {
               ?>
     <h1> Please wait until HyperSpace has been fully deployed before accessing SiaChain. </h1>
     <?php } else { ?>

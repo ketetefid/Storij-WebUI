@@ -1,23 +1,23 @@
 <?php
   require_once 'php/GoogleAuthenticator.php';
-  $tfsecret=@trim(file_get_contents('/etc/SiaBerry/2fa-secret'));
+  $tfsecret=@trim(file_get_contents('/etc/storij/2fa-secret'));
   if ($tfsecret == '') {
       $tfauth = new PHPGangsta_GoogleAuthenticator();
       $secret = $tfauth->createSecret();
-      $website = 'http://siaberry.com';
-      $title= 'SiaBerryOS';
+      $website = 'https://storij.net';
+      $title= 'StorijOS';
       $qrCodeUrl = $tfauth->getQRCodeGoogleUrl($title, $secret,$website);
 ?>
 <!DOCTYPE html>
 <html class="html2">
   <head>
     <meta charset="UTF-8">
-    <title>SiaBerry OS, Hosting and Renting Platform
+    <title>Storij OS, Storage Hosting Platform Based on Cryptos
     </title>
     <link rel="stylesheet" href="css/login.css">
   </head>
   <body>
-    <h1>Welcome to SiaBerryOS</h1>
+    <h1>Welcome to StorijOS</h1>
     <div id="maindiv">
       <form name="mainForm" method="post" action="ActionPage.php" onsubmit="return checkTZ()">
 	<?php
@@ -62,7 +62,7 @@
           $_SESSION['auth_token'] = bin2hex(random_bytes(28));
           session_write_close();
       }
-      $hashval=trim(file_get_contents('/etc/SiaBerry/hashval'));
+      $hashval=trim(file_get_contents('/etc/storij/hashval'));
       // Make the session valid for 20 minutes.
       if ( isset($_SESSION['uname']) and isset($_SESSION['authenticator']) and
            isset($_SESSION['timeout']) and time() - $_SESSION['timeout'] < 1200 and
@@ -77,12 +77,12 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>SiaBerry OS, Hosting and Renting Platform
+    <title>Storij OS, Storage Hosting Platform Based on Cryptos
     </title>
     <link rel="stylesheet" href="css/login.css">
   </head>
   <body>
-    <h1>Welcome to SiaBerryOS</h1>
+    <h1>Welcome to StorijOS</h1>
     <div id="maindiv">
       <form name="mainForm" method="post" action="ActionPage.php" onsubmit="return formChecker()">
 	<label for="uname"><b>Username</b></label>

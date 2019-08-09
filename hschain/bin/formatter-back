@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # Get $SIAUSR ready.
-source /boot/SiaBerry/parameters.txt
+source /boot/storij/parameters.txt
 
 function format_and_add {
     # Create the partition.

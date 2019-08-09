@@ -1,6 +1,6 @@
 #! /bin/bash
 # Get $SIAUSR ready.
-source /boot/SiaBerry/parameters.txt
+source /boot/storij/parameters.txt
 
 # Get the UUID of the partition
 # by blkid:  diskid=$(/usr/bin/sudo /sbin/blkid -s UUID -o value /dev/$1)

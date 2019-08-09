@@ -441,15 +441,21 @@ $(document).ready(function () {
 $(function(){
     $("#OpenWebShell").click(function(){
 	var int_ip=$("#int_ip").val();
-	$("#WebShellMessage").html('Opening a Web Shell...<i class="fa fa-cog fa-spin fa-2x fa-fw"></i>').show().fadeOut(3000);
-	// Wait for 1 sec to make sure the webshell has started and print a message.
-	setTimeout(function(){
-	    // This has the caveat that if the user changes int_ip in the meantime, the page will not load.
-	    // We have to do this as Android does not support .local DNS resolution.
-	    // Also it is because of the bug that the browser does not show the content.
-	    $("#WebShellInfo").html('<iframe src="http://'+int_ip+':4554" style="width:100%;"></iframe>');
-	    $("#WebShellModal").show();
-	},1000);
+	var hostnameval=$("#hostname").val();
+	if (int_ip == "auto") {
+	    alert ("You have set the internal IP to auto. Please first reboot the device to make it get a pre-defined IP.");
+	} else {
+	    $("#WebShellMessage").html('Opening a Web Shell...<i class="fa fa-cog fa-spin fa-2x fa-fw"></i>').show().fadeOut(3000);
+	    // Wait for 1 sec to make sure the webshell has started and print a message.
+	    setTimeout(function(){
+		// This has the caveat that if the user changes int_ip in the meantime, the page will not load.
+		// We have to do this as Android does not support .local DNS resolution.
+		// Also it is because of the bug that the browser does not show the content.
+		// I finally opted for .local domains.
+		$("#WebShellInfo").html('<iframe src="http://'+hostnameval+'.local:4554" style="width:100%;"></iframe>');
+		$("#WebShellModal").show();
+	    },1000);
+	}
     });
 
     $("#closeWebShell").click(function(){

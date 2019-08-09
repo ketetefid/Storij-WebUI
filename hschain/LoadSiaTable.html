@@ -17,16 +17,16 @@
       </legend>
       
       <table class="t1">
-	<?php if (file_exists('/boot/SiaBerry/XSCSyncStep1')) { ?>
+	<?php if (file_exists('/boot/storij/XSCSyncStep1')) { ?>
 	<caption>
 	  <div class="InfoMessage2" style="font-size:20px;">
             Preparing the attached drive: <i class="fa fa-cog fa-spin fa-2x fa-fw"></i>
 	  </div>
 	  <div class="InfoMessage2" style="color:blue;">
-	    <?= file_get_contents('/etc/SiaBerry/XSC-DevSetup');?>
+	    <?= file_get_contents('/etc/storij/XSC-DevSetup');?>
 	  </div>
 	</caption>
-	<?php } else if (file_exists('/boot/SiaBerry/XSCSyncStep2a')) { ?>
+	<?php } else if (file_exists('/boot/storij/XSCSyncStep2a')) { ?>
 	<caption>
 	  <div class="InfoMessage2" style="font-size:20px;">
 	    Downloading or continuing the download of consensus.db ...<i class="fa fa-cog fa-spin fa-2x fa-fw"></i>
@@ -35,7 +35,7 @@
 	    <?php echo shell_exec("sed 'x;$!d' </wget-log"); ?>
 	  </div>
 	</caption>
-	<?php } else if (file_exists('/boot/SiaBerry/XSCSyncStep2b')) { ?>
+	<?php } else if (file_exists('/boot/storij/XSCSyncStep2b')) { ?>
 	<caption>
 	  <div class="InfoMessage2" style="font-size:20px;">
 	    Downloading or continuing the download of pre-verified layout ...<i class="fa fa-cog fa-spin fa-2x fa-fw"></i>
@@ -44,14 +44,14 @@
 	    <?php echo shell_exec("sed 'x;$!d' </wget-log"); ?>
 	  </div>
 	</caption>
-	<?php } else if (file_exists('/boot/SiaBerry/XSCSyncStep3a') or file_exists('/boot/SiaBerry/XSCSyncStep3b')) { ?>
+	<?php } else if (file_exists('/boot/storij/XSCSyncStep3a') or file_exists('/boot/storij/XSCSyncStep3b')) { ?>
 	<caption>
 	  <div class="InfoMessage2" style="font-size:20px;">
 	    Updating HyperSpace and the structure in the drive:<i class="fa fa-cog fa-spin fa-2x fa-fw"></i>
 	  </div>
 	  <br>
 	  <div class="InfoMessage2" style="color:blue;">
-	    <p><?= file_get_contents('/etc/SiaBerry/XSC-DevSetup');?></p>
+	    <p><?= file_get_contents('/etc/storij/XSC-DevSetup');?></p>
 	  </div>
 	  <p><b>The system will reboot itself once everything is set.</b></p>
 	</caption>

@@ -1,2 +1,2 @@
 #! /bin/bash
-/bin/sed -i 's,^\([ ]*expand[ ]*=\).*,\1'1',g' /boot/SiaBerry/parameters.txt
+/bin/sed -i 's,^\([ ]*expand[ ]*=\).*,\1'1',g' /boot/storij/parameters.txt

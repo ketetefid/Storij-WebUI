@@ -1,6 +1,6 @@
 @import url("OpenSans.css");
 html { 
-    background: url(../img/SiaBerry-bg.jpg) no-repeat center center fixed;
+    background: url(../img/Storij-bg.jpg) no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -10,7 +10,7 @@ html {
 @media screen and (max-width: 1024px) {
     html {
 	/* Let the picture repeat itself if necessary on a mobile device */
-	background: url(../img/SiaBerry-bg-mobile.jpg); /* center center fixed; */
+	background: url(../img/Storij-bg-mobile.jpg); /* center center fixed; */
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;

@@ -119,7 +119,7 @@
 	</td>
 	<td>
 	  <form method="post">
-            <input type="text" spellcheck="false" class="configtxt" name="siausr" value="<?php echo $siausr ?>" size="20" id="siausr" title="This is the user who will run the HyperSpace software. If necessary, the OS will automatically create this user. Remember that your chosen name must not have any spaces in it or it will not be shown. The username must be all in lower case, too. Also, do not set this as 'root' as it is dangerous practice to run the software as root. If you do not know what you should set this to, then the default is fine. [default:siauser]">
+            <input type="text" spellcheck="false" class="configtxt" name="siausr" value="<?php echo $siausr ?>" size="20" id="siausr" title="This is the user who will run the HyperSpace software. If necessary, the OS will automatically create this user. Remember that your chosen name must not have any spaces in it or it will not be shown. The username must be all in lower case, too. Also, do not set this as 'root' as it is dangerous practice to run the software as root. If you do not know what you should set this to, then the default is fine. [default:storijer]">
 	    <input type="submit" class="configsubmit" value="Set it!" id="siausrsubmit">
 	  </form>
 	</td>
@@ -131,7 +131,7 @@
 	</td>
 	<td>
 	  <form method="post">
-            <input type="text" spellcheck="false" class="configtxt" name="rpc_port" value=<?php echo $rpc_port ?> size="20" id="rpc_port" title="This is the RPC port on which the HyperSpace software will run. [default:9981]">
+            <input type="text" spellcheck="false" class="configtxt" name="rpc_port" value=<?php echo $rpc_port ?> size="20" id="rpc_port" title="This is the RPC port on which the HyperSpace software will run. [default:6681]">
 	    <input type="submit" class="configsubmit" value="Set it!" id="rpc_portsubmit">
 	  </form>
 	</td>
@@ -143,7 +143,7 @@
 	</td>
 	<td>
 	  <form method="post">
-            <input type="text" spellcheck="false" class="configtxt" name="host_port" value=<?php echo $host_port ?> size="20" id="host_port" title="This is the host port on which the HyperSpace software will run. [default:9982]">
+            <input type="text" spellcheck="false" class="configtxt" name="host_port" value=<?php echo $host_port ?> size="20" id="host_port" title="This is the host port on which the HyperSpace software will run. [default:6682]">
 	    <input type="submit" class="configsubmit" value="Set it!" id="host_portsubmit">
 	  </form>
 	</td>
@@ -155,7 +155,7 @@
 	</td>
 	<td>
           <form method="post">
-            <input type="text" spellcheck="false" class="configtxt" name="int_ip" value=<?php echo $int_ip ?> size="20" id="int_ip" title="This is the static internal LAN IP that the device will get in your home or work network. For example, if an attached device in the network gets an IP like 192.168.2.5 then you should set this value to something like 192.168.2.100 which is in the same subnet. If you set this to 'auto', it will automatically get an appropriate IP in the pattern of xxx.xxx.xxx.100. If you are reading this information, most probably it means that an IP has already been set and no further action is required unless you want to change it. This variable will take affect on every boot.">
+            <input type="text" spellcheck="false" class="configtxt" name="int_ip" value=<?php echo $int_ip ?> size="20" id="int_ip" title="This is the static internal LAN IP that the device will get in your home or work network. For example, if an attached device in the network gets an IP like 192.168.2.5 then you should set this value to something like 192.168.2.100 which is in the same subnet. If you set this to 'auto', it will automatically get an appropriate IP in the pattern of xxx.xxx.xxx.100. If you are reading this information, most probably it means that an IP has already been set and no further action is required unless you want to change it. This variable will take effect on every boot.">
             <input type="submit" class="configsubmit" value="Set it!" id="int_ipsubmit">
           </form>	      
 	</td>
@@ -166,7 +166,7 @@
 	</td>
         <td>
 	  <form method="post">
-              <input type="text" spellcheck="false" class="configtxt" name="hostname" value=<?php echo shell_exec('source /etc/conf.d/hostname && echo $hostname'); ?> size="20" id="hostname" title="This is the host name by which the system is identified on the local network. If you intend to run more than one SiaBerry device on the same local network, you had better assign different hostnames to the two systems. The name must be in lowercase and may contain numbers but not in the first position. [default:siaberryos]">
+              <input type="text" spellcheck="false" class="configtxt" name="hostname" value=<?php echo shell_exec('source /etc/conf.d/hostname && echo $hostname'); ?> size="20" id="hostname" title="This is the host name by which the system is identified on the local network. If you intend to run more than one Storij device on the same local network, you had better assign different hostnames to the two systems. The name must be in lowercase and may contain numbers but not in the first position. [default:storijos]">
 	    <input type="submit" class="configsubmit" value="Set it!" id="hostnamesubmit">
 	  </form>
         </td>
@@ -368,11 +368,11 @@
 	  </span>
 	</div>
 	<div class="modal-body" id="WebShellInfo" style="text-align:center;">
-	  <!-- This does not work in some browser and it shows an empty page. We import it in the js.
+	  <!-- This does not work in some browsers and it shows an empty page. We will import it in the js.
 	       <iframe src="http://<?= $int_ip ?>:4554" style="width:100%;"></iframe> -->
 	</div>
 	<div class="modal-footer" id="WebShellFooter">
-	  <a href="http://<?= $int_ip ?>:4554" target="_blank" style="color: inherit;text-decoration: none;"><input type="button" value="Open in New Tab" id="NewTabWebShellButton" class="OkCancelButton" style="width:170px;"></a>
+	  <a href="http://<?php echo shell_exec('source /etc/conf.d/hostname && echo $hostname').'.local:4554'; ?>" target="_blank" style="color: inherit;text-decoration: none;"><input type="button" value="Open in New Tab" id="NewTabWebShellButton" class="OkCancelButton" style="width:170px;"></a>
 	  <input type="button" value="Close" id="CloseWebShellButton" class="OkCancelButton" style="width:170px;">
 	</div>
       </div>

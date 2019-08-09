@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # Get $SIAUSR and $disklayout ready.
-source /boot/SiaBerry/parameters.txt
+source /boot/storij/parameters.txt
 
 function partitioner {
     disk="$1"

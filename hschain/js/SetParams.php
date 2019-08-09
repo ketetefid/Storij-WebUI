@@ -26,7 +26,7 @@ if ( isset($_SESSION['uname']) and isset($_SESSION['authenticator']) and
       $setupDev=$_POST['setupDev'];
       // Remove the word setup from the result
       $setupDevName=preg_replace("/setup/","",$setupDev);
-      exec("udevadm info --query=all --name=/dev/$setupDevName | grep ID_SERIAL= | cut -d '=' -f 2 > /etc/SiaBerry/XSC-DevSetup");
+      exec("udevadm info --query=all --name=/dev/$setupDevName | grep ID_SERIAL= | cut -d '=' -f 2 > /etc/storij/XSC-DevSetup");
       exec("../bin/SetParams 'setup_xsc' '$bootstraptype'");
     } else if ($formatflashval==="false") {
       exec("../bin/ChangeFormatFlashNo");
@@ -423,8 +423,8 @@ if ( isset($_SESSION['uname']) and isset($_SESSION['authenticator']) and
       $HostList[$kp]=$output;
       $kp++;
     }
-    // Writing the hostpoints to a file for later retrieval. We write to /boot/SiaBerry as it is owned by apache.
-    $file='/boot/SiaBerry/XSCHostPoints.txt';
+    // Writing the hostpoints to a file for later retrieval. We write to /boot/storij as it is owned by apache.
+    $file='/boot/storij/XSCHostPoints.txt';
     file_put_contents ($file,$HostList);
     // Jsonizing the hostlist for easy manipulating in JS side.
     echo json_encode ($HostList);
@@ -434,7 +434,7 @@ if ( isset($_SESSION['uname']) and isset($_SESSION['authenticator']) and
   if (isset($_POST['storageSizes'])){
     // Getting the storage
     $storageSizes=$_POST['storageSizes'];
-    $hosts=file('/boot/SiaBerry/XSCHostPoints.txt');
+    $hosts=file('/boot/storij/XSCHostPoints.txt');
     
     // Check if the storage path from the file was already set in the software -> user wants to resize.
     // Check if the storage path from the file was not set in the software -> user wants to add new storage.

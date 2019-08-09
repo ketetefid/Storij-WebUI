@@ -1,2 +1,2 @@
 #! /bin/bash
-echo "$1" > /etc/SiaBerry/hashval
+echo "$1" > /etc/storij/hashval
